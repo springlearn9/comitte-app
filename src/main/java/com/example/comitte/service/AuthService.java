@@ -9,11 +9,8 @@ import com.example.comitte.entity.Role;
 import com.example.comitte.repository.MemberRepository;
 import com.example.comitte.repository.RoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,10 +24,6 @@ import java.util.stream.Collectors;
 public class AuthService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-    @Value("${jwt.expiration-ms}")
-    private long jwtExpirationMs;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Transactional
