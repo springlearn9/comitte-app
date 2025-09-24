@@ -9,8 +9,13 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
 
+  sql:
+    init:
+      platform: postgres
+      mode: always
   # JPA/Hibernate Configuration
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update # use 'validate' in production
     show-sql: true
