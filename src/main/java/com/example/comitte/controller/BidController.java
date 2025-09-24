@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/comitte-bids")
 @RequiredArgsConstructor
@@ -30,6 +32,12 @@ public class BidController {
     @GetMapping("/{id}")
     public ResponseEntity<ComitteBidDto> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
+    }
+
+    @GetMapping("/{comitteId}/bids")
+    public ResponseEntity<List<ComitteBidDto>> getBidsByComitteId(@PathVariable Long comitteId) {
+        List<ComitteBidDto> bids = service.getBidsByComitteId(comitteId);
+        return ResponseEntity.ok(bids);
     }
 
     @PutMapping("/{id}")

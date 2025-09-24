@@ -20,17 +20,24 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ComitteBidService {
-    private final BidRepository repo;
+    private final BidRepository bidRepository;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public Page<ComitteBidDto> list(Pageable p) {
-        var pg = repo.findAll(p);
+        var pg = bidRepository.findAll(p);
         var dtos = pg.stream().map(this::toDto).collect(Collectors.toList());
         return new PageImpl<>(dtos, p, pg.getTotalElements());
     }
 
     public ComitteBidDto get(Long id) {
-        return repo.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+        return bidRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+    }
+
+    public List<ComitteBidDto> getBidsByComitteId(Long comitteId) {
+        return bidRepository.findByComitteId(comitteId)
+                .stream()
+                .map(this::toDto) // if using a mapper
+                .toList();
     }
 
     @Transactional
@@ -41,13 +48,13 @@ public class ComitteBidService {
             b.setReceiversList(mapper.writeValueAsString(dto.getReceiversList()));
         } catch (Exception e) {
         }
-        repo.save(b);
+        bidRepository.save(b);
         return toDto(b);
     }
 
     @Transactional
     public ComitteBidDto update(Long id, ComitteBidCreateDto dto) {
-        Bid b = repo.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+        Bid b = bidRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
         b.setFinalBidAmt(dto.getFinalBidAmt());
         b.setFinalBidder(dto.getFinalBidder());
         try {
@@ -55,24 +62,24 @@ public class ComitteBidService {
             b.setReceiversList(mapper.writeValueAsString(dto.getReceiversList()));
         } catch (Exception e) {
         }
-        repo.save(b);
+        bidRepository.save(b);
         return toDto(b);
     }
 
     @Transactional
     public void delete(Long id) {
-        repo.deleteById(id);
+        bidRepository.deleteById(id);
     }
 
     @Transactional
     public ComitteBidDto placeBid(Long id, BidItemDto bid) {
-        Bid b = repo.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+        Bid b = bidRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
         try {
             List<BidItemDto> list = mapper.readValue(b.getBids() == null ? "[]" : b.getBids(), new TypeReference<List<BidItemDto>>() {
             });
             list.add(bid);
             b.setBids(mapper.writeValueAsString(list));
-            repo.save(b);
+            bidRepository.save(b);
             return toDto(b);
         } catch (Exception e) {
             throw new RuntimeException(e);
