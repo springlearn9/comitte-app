@@ -1,4 +1,4 @@
-package com.example.comitte.dto.bid;
+package com.example.comitte.model.dto.bid;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
@@ -13,7 +13,7 @@ public class ComitteBidCreateDto {
     private Long comitteId;
     private Integer comitteNumber;
     private Long finalBidder;
-    private BigDecimal finalBidAmt;
+    private Integer finalBidAmt;
     private LocalDateTime bidDate;
     private List<BidItemDto> bids;
     private List<Long> receiversList;

@@ -1,4 +1,4 @@
-package com.example.comitte.entity;
+package com.example.comitte.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

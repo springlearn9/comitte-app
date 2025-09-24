@@ -1,14 +1,23 @@
-package com.example.comitte.dto.comitte;
+package com.example.comitte.model.entity;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Entity
+@Table(name = "comittes")
 @Data
-public class ComitteDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Comitte {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long comitteId;
     private Long ownerId;
     private String comitteName;
@@ -18,6 +27,8 @@ public class ComitteDto {
     private Integer fullShare;
     private Integer dueDateDays;
     private Integer paymentDateDays;
+    @CreatedDate
     private LocalDateTime createdTimestamp;
+    @LastModifiedDate
     private LocalDateTime updatedTimestamp;
 }

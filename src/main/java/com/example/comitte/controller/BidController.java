@@ -1,8 +1,8 @@
 package com.example.comitte.controller;
 
-import com.example.comitte.dto.bid.BidItemDto;
-import com.example.comitte.dto.bid.ComitteBidCreateDto;
-import com.example.comitte.dto.bid.ComitteBidDto;
+import com.example.comitte.model.dto.bid.BidItemDto;
+import com.example.comitte.model.dto.bid.ComitteBidCreateDto;
+import com.example.comitte.model.dto.bid.ComitteBidDto;
 import com.example.comitte.service.ComitteBidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.example.comitte.dto.user;
+package com.example.comitte.model.dto.user;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;

@@ -1,7 +1,7 @@
 package com.example.comitte.controller;
 
-import com.example.comitte.dto.map.ComitteMemberMapCreateDto;
-import com.example.comitte.dto.map.ComitteMemberMapDto;
+import com.example.comitte.model.dto.map.ComitteMemberMapCreateDto;
+import com.example.comitte.model.dto.map.ComitteMemberMapDto;
 import com.example.comitte.service.ComitteMemberMapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

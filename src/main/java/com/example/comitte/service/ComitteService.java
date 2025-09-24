@@ -1,9 +1,9 @@
 package com.example.comitte.service;
 
-import com.example.comitte.dto.comitte.ComitteCreateDto;
-import com.example.comitte.dto.comitte.ComitteDto;
-import com.example.comitte.entity.Comitte;
-import com.example.comitte.entity.ComitteMemberMap;
+import com.example.comitte.model.dto.comitte.ComitteCreateDto;
+import com.example.comitte.model.dto.comitte.ComitteDto;
+import com.example.comitte.model.entity.Comitte;
+import com.example.comitte.model.entity.ComitteMemberMap;
 import com.example.comitte.repository.ComitteMemberMapRepository;
 import com.example.comitte.repository.ComitteRepository;
 import lombok.RequiredArgsConstructor;

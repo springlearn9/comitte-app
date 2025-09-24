@@ -1,6 +1,6 @@
 package com.example.comitte.repository;
 
-import com.example.comitte.entity.Member;
+import com.example.comitte.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

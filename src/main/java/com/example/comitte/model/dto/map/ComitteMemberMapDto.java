@@ -1,4 +1,4 @@
-package com.example.comitte.dto.map;
+package com.example.comitte.model.dto.map;
 
 import lombok.Data;
 

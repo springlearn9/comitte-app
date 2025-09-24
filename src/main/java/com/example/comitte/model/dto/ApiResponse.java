@@ -1,4 +1,4 @@
-package com.example.comitte.dto;
+package com.example.comitte.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,11 +1,9 @@
 package com.example.comitte.service;
 
-import com.example.comitte.dto.auth.RegisterRequestDto;
-import com.example.comitte.dto.auth.LoginRequestDto;
-import com.example.comitte.dto.auth.LoginResponseDto;
-import com.example.comitte.dto.member.MemberDto;
-import com.example.comitte.entity.Member;
-import com.example.comitte.entity.Role;
+import com.example.comitte.model.dto.auth.RegisterRequestDto;
+import com.example.comitte.model.dto.member.MemberDto;
+import com.example.comitte.model.entity.Member;
+import com.example.comitte.model.entity.Role;
 import com.example.comitte.repository.MemberRepository;
 import com.example.comitte.repository.RoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

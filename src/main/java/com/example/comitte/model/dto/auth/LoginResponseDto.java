@@ -1,4 +1,4 @@
-package com.example.comitte.dto.auth;
+package com.example.comitte.model.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

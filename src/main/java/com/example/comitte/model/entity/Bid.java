@@ -1,4 +1,4 @@
-package com.example.comitte.entity;
+package com.example.comitte.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,7 @@ public class Bid {
     private Long comitteId;
     private Integer comitteNumber;
     private Long finalBidder;
-    private BigDecimal finalBidAmt;
+    private Integer finalBidAmt;
     private LocalDateTime bidDate;
     @Column(columnDefinition = "jsonb")
     private String bids;

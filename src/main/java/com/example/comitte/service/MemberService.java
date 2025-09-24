@@ -1,11 +1,11 @@
 package com.example.comitte.service;
 
-import com.example.comitte.dto.member.MemberCreateDto;
-import com.example.comitte.dto.member.MemberDto;
-import com.example.comitte.dto.role.RoleAssignDto;
-import com.example.comitte.dto.user.UserUpdateDto;
-import com.example.comitte.entity.Member;
-import com.example.comitte.entity.Role;
+import com.example.comitte.model.dto.member.MemberCreateDto;
+import com.example.comitte.model.dto.member.MemberDto;
+import com.example.comitte.model.dto.role.RoleAssignDto;
+import com.example.comitte.model.dto.user.UserUpdateDto;
+import com.example.comitte.model.entity.Member;
+import com.example.comitte.model.entity.Role;
 import com.example.comitte.repository.MemberRepository;
 import com.example.comitte.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

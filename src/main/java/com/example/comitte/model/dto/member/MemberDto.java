@@ -1,4 +1,4 @@
-package com.example.comitte.dto.member;
+package com.example.comitte.model.dto.member;
 
 import lombok.Data;
 

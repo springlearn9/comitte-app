@@ -1,10 +1,8 @@
 package com.example.comitte.controller;
 
-import com.example.comitte.dto.auth.RegisterRequestDto;
-import com.example.comitte.dto.auth.LoginRequestDto;
-import com.example.comitte.dto.member.MemberDto;
+import com.example.comitte.model.dto.auth.RegisterRequestDto;
+import com.example.comitte.model.dto.member.MemberDto;
 import com.example.comitte.service.AuthService;
-import com.example.comitte.dto.auth.LoginResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

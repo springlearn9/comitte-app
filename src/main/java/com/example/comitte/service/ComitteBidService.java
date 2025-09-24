@@ -1,9 +1,9 @@
 package com.example.comitte.service;
 
-import com.example.comitte.dto.bid.BidItemDto;
-import com.example.comitte.dto.bid.ComitteBidCreateDto;
-import com.example.comitte.dto.bid.ComitteBidDto;
-import com.example.comitte.entity.Bid;
+import com.example.comitte.model.dto.bid.BidItemDto;
+import com.example.comitte.model.dto.bid.ComitteBidCreateDto;
+import com.example.comitte.model.dto.bid.ComitteBidDto;
+import com.example.comitte.model.entity.Bid;
 import com.example.comitte.repository.BidRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

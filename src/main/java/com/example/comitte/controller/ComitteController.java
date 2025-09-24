@@ -1,7 +1,7 @@
 package com.example.comitte.controller;
 
-import com.example.comitte.dto.comitte.ComitteCreateDto;
-import com.example.comitte.dto.comitte.ComitteDto;
+import com.example.comitte.model.dto.comitte.ComitteCreateDto;
+import com.example.comitte.model.dto.comitte.ComitteDto;
 import com.example.comitte.service.ComitteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

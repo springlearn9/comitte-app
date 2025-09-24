@@ -1,8 +1,8 @@
 package com.example.comitte.service;
 
-import com.example.comitte.dto.map.ComitteMemberMapCreateDto;
-import com.example.comitte.dto.map.ComitteMemberMapDto;
-import com.example.comitte.entity.ComitteMemberMap;
+import com.example.comitte.model.dto.map.ComitteMemberMapCreateDto;
+import com.example.comitte.model.dto.map.ComitteMemberMapDto;
+import com.example.comitte.model.entity.ComitteMemberMap;
 import com.example.comitte.repository.ComitteMemberMapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
