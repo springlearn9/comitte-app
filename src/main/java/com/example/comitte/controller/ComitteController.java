@@ -14,36 +14,36 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/comittes")
 @RequiredArgsConstructor
 public class ComitteController {
-    private final ComitteService service;
+    private final ComitteService comitteService;
 
     @PostMapping
     public ResponseEntity<ComitteDto> create(@Valid @RequestBody ComitteCreateDto dto) {
-        return ResponseEntity.status(201).body(service.create(dto));
+        return ResponseEntity.status(201).body(comitteService.create(dto));
     }
 
     @GetMapping
     public ResponseEntity<Page<ComitteDto>> list(Pageable p) {
-        return ResponseEntity.ok(service.list(p));
+        return ResponseEntity.ok(comitteService.list(p));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ComitteDto> get(@PathVariable Long id) {
-        return ResponseEntity.ok(service.get(id));
+        return ResponseEntity.ok(comitteService.get(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ComitteDto> update(@PathVariable Long id, @Valid @RequestBody ComitteCreateDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(comitteService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        service.delete(id);
+        comitteService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/assign-members")
     public ResponseEntity<ComitteDto> assign(@PathVariable Long id, @RequestBody java.util.List<Long> memberIds) {
-        return ResponseEntity.ok(service.assignMembers(id, memberIds));
+        return ResponseEntity.ok(comitteService.assignMembers(id, memberIds));
     }
 }

@@ -14,31 +14,31 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberService service;
+    private final MemberService memberService;
 
     @PostMapping
     public ResponseEntity<MemberDto> create(@Valid @RequestBody MemberCreateDto dto) {
-        return ResponseEntity.status(201).body(service.create(dto));
+        return ResponseEntity.status(201).body(memberService.create(dto));
     }
 
     @GetMapping
     public ResponseEntity<Page<MemberDto>> list(Pageable p) {
-        return ResponseEntity.ok(service.list(p));
+        return ResponseEntity.ok(memberService.list(p));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDto> get(@PathVariable Long id) {
-        return ResponseEntity.ok(service.get(id));
+        return ResponseEntity.ok(memberService.get(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberDto> update(@PathVariable Long id, @Valid @RequestBody MemberCreateDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(memberService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        service.delete(id);
+        memberService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
