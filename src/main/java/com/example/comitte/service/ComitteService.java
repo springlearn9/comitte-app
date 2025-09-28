@@ -3,33 +3,26 @@ package com.example.comitte.service;
 import com.example.comitte.model.dto.comitte.ComitteCreateDto;
 import com.example.comitte.model.dto.comitte.ComitteDto;
 import com.example.comitte.model.entity.Comitte;
+import com.example.comitte.model.entity.ComitteMemberId;
 import com.example.comitte.model.entity.ComitteMemberMap;
-import com.example.comitte.repository.ComitteMemberMapRepository;
+import com.example.comitte.model.entity.Member;
 import com.example.comitte.repository.ComitteRepository;
+import com.example.comitte.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ComitteService {
     private final ComitteRepository comitteRepository;
-    private final ComitteMemberMapRepository comitteMemberMapRepository;
+    private final MemberRepository memberRepository;
 
-    public Page<ComitteDto> list(Pageable p) {
-        var pg = comitteRepository.findAll(p);
-        List<ComitteDto> l = pg.stream().map(this::toDto).collect(Collectors.toList());
-        return new PageImpl<>(l, p, pg.getTotalElements());
-    }
-
-    public ComitteDto get(Long id) {
-        return comitteRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+    public ComitteDto get(Long comitteId) {
+        return comitteRepository.findById(comitteId).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Transactional
@@ -40,8 +33,8 @@ public class ComitteService {
     }
 
     @Transactional
-    public ComitteDto update(Long id, ComitteCreateDto dto) {
-        Comitte c = comitteRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+    public ComitteDto update(Long comitteId, ComitteCreateDto dto) {
+        Comitte c = comitteRepository.findById(comitteId).orElseThrow(() -> new RuntimeException("not found"));
         c.setComitteName(dto.getComitteName());
         c.setStartDate(dto.getStartDate());
         c.setFullAmount(dto.getFullAmount());
@@ -59,13 +52,37 @@ public class ComitteService {
     }
 
     @Transactional
-    public ComitteDto assignMembers(Long id, java.util.List<Long> memberIds) {
-        Comitte c = comitteRepository.findById(id).orElseThrow(() -> new RuntimeException("not found")); // clear existing? just add
-        for (Long mid : memberIds) {
-            ComitteMemberMap m = ComitteMemberMap.builder().comitteId(id).memberId(mid).shareCount(1).build();
-            comitteMemberMapRepository.save(m);
+    public ComitteDto assignMembers(Long comitteId, Map<Long, Integer> memberShares) {
+        Comitte comitte = comitteRepository.findById(comitteId)
+                .orElseThrow(() -> new RuntimeException("Comitte not found"));
+
+        for (Map.Entry<Long, Integer> entry : memberShares.entrySet()) {
+            Long memberId = entry.getKey();
+            Integer shareCount = entry.getValue();
+
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new RuntimeException("Member not found"));
+
+            ComitteMemberMap mapping = ComitteMemberMap.builder()
+                    .id(new ComitteMemberId(comitteId, memberId))
+                    .comitte(comitte)
+                    .member(member)
+                    .shareCount(shareCount)
+                    .build();
+
+            comitte.getMemberMappings().add(mapping);
         }
-        return toDto(c);
+
+        Comitte updated = comitteRepository.save(comitte);
+        return toDto(updated);
+    }
+
+
+    public List<ComitteDto> getMemberComittes(Long memberId) {
+        return comitteRepository.findComittesByMemberId(memberId)
+                .stream()
+                .map(this::toDto) // convert to DTO
+                .toList();
     }
 
     private ComitteDto toDto(Comitte c) {

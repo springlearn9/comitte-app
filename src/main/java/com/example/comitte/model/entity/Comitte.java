@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comittes")
@@ -31,4 +33,7 @@ public class Comitte {
     private LocalDateTime createdTimestamp;
     @LastModifiedDate
     private LocalDateTime updatedTimestamp;
+
+    @OneToMany(mappedBy = "comitte", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ComitteMemberMap> memberMappings = new HashSet<>();
 }

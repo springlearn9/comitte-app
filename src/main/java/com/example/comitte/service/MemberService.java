@@ -9,9 +9,6 @@ import com.example.comitte.model.entity.Role;
 import com.example.comitte.repository.MemberRepository;
 import com.example.comitte.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
@@ -24,11 +21,6 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
-    public Page<MemberDto> list(Pageable p) {
-        var pg = memberRepository.findAll(p);
-        List<MemberDto> l = pg.stream().map(this::toDto).collect(Collectors.toList());
-        return new PageImpl<>(l, p, pg.getTotalElements());
-    }
 
     public MemberDto get(Long id) {
         return memberRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));

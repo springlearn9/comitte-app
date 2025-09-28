@@ -8,9 +8,6 @@ import com.example.comitte.repository.BidRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
@@ -19,15 +16,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ComitteBidService {
+public class BidService {
     private final BidRepository bidRepository;
     private final ObjectMapper mapper = new ObjectMapper();
-
-    public Page<ComitteBidDto> list(Pageable p) {
-        var pg = bidRepository.findAll(p);
-        var dtos = pg.stream().map(this::toDto).collect(Collectors.toList());
-        return new PageImpl<>(dtos, p, pg.getTotalElements());
-    }
 
     public ComitteBidDto get(Long id) {
         return bidRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
@@ -88,7 +79,7 @@ public class ComitteBidService {
 
     private ComitteBidDto toDto(Bid b) {
         ComitteBidDto d = new ComitteBidDto();
-        d.setId(b.getId());
+        d.setId(b.getBidId());
         d.setComitteId(b.getComitteId());
         d.setComitteNumber(b.getComitteNumber());
         d.setFinalBidder(b.getFinalBidder());
