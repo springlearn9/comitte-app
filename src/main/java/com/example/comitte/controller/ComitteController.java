@@ -5,7 +5,6 @@ import com.example.comitte.model.dto.comitte.ComitteCreateDto;
 import com.example.comitte.model.dto.comitte.ComitteDto;
 import com.example.comitte.service.BidService;
 import com.example.comitte.service.ComitteService;
-import com.example.comitte.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ComitteController {
     private final ComitteService comitteService;
-    private final MemberService memberService;
     private final BidService bidService;
 
     @PostMapping
