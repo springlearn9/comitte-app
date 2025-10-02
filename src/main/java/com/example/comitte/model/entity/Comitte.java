@@ -33,7 +33,4 @@ public class Comitte {
     private LocalDateTime createdTimestamp;
     @LastModifiedDate
     private LocalDateTime updatedTimestamp;
-
-    @OneToMany(mappedBy = "comitte", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ComitteMemberMap> memberMappings = new HashSet<>();
 }

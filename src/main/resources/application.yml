@@ -12,12 +12,12 @@ spring:
   sql:
     init:
       platform: postgres
-      mode: never
+      mode: always
   # JPA/Hibernate Configuration
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update # use 'validate' in production
+      ddl-auto: update # none/validate/update/create/create-drop/use 'validate' in production
     show-sql: true
     properties:
       hibernate:

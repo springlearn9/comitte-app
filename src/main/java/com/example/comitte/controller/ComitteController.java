@@ -47,11 +47,8 @@ public class ComitteController {
     }
 
     @PostMapping("/{comitteId}/assign-members")
-    public ResponseEntity<ComitteDto> assignMembers(
-            @PathVariable Long comitteId, @RequestParam("pageSize") String pageSize,
-            @RequestBody Map<Long, Integer> memberShares) {
-        // memberId -> shareCount
-        return ResponseEntity.ok(comitteService.assignMembers(comitteId, memberShares));
+    public ResponseEntity<ComitteDto> assign(@PathVariable Long id, @RequestBody java.util.List<Long> memberIds) {
+        return ResponseEntity.ok(comitteService.assignMembers(id, memberIds));
     }
 
     // Get all bids for a comitte

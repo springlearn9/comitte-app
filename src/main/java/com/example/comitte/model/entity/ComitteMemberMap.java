@@ -14,25 +14,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ComitteMemberMap {
-
-    @EmbeddedId
-    private ComitteMemberId id = new ComitteMemberId();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("comitteId")
-    @JoinColumn(name = "comitte_id")
-    private Comitte comitte;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("memberId")
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long comitteId;
+    private Long memberId;
     private Integer shareCount;
-
     @CreatedDate
     private LocalDateTime createdTimestamp;
-
     @LastModifiedDate
     private LocalDateTime updatedTimestamp;
 }

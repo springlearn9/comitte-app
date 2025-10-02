@@ -43,9 +43,6 @@ public class Member {
     @Column(name = "updated_timestamp")
     private LocalDateTime updatedTimestamp;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ComitteMemberMap> comitteMappings = new HashSet<>();
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_map",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
