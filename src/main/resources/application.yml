@@ -45,6 +45,6 @@ springdoc:
 
 logging:
   level:
-    com.example.comitte: DEBUG # Sets the log level to DEBUG for your application's packages
+    com.ls: DEBUG # Sets the log level to DEBUG for your application's packages
     org.springframework.web: DEBUG # Sets the log level to INFO for Spring Web classes
     org.hibernate: ERROR # Sets the log level to ERROR for Hibernate (JPA)
