@@ -25,9 +25,7 @@ public class BidService {
     }
 
     public List<ComitteBidDto> getBidsByComitteId(Long comitteId) {
-        return bidRepository.findByComitteId(comitteId)
-                .stream()
-                .map(this::toDto) // if using a mapper
+        return bidRepository.findByComitteId(comitteId).stream().map(this::toDto) // if using a mapper
                 .toList();
     }
 
