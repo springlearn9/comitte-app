@@ -20,10 +20,10 @@ public class BidController {
     private final BidService bidService;
 
     @PostMapping
-    public ResponseEntity<BidResponse> create(@Valid @RequestBody BidRequest dto) {
-        log.info("Creating bid with data: {}", dto);
-        BidResponse response = bidService.create(dto);
-        log.info("Bid created with ID: {}", response.getId());
+    public ResponseEntity<BidResponse> create(@Valid @RequestBody BidRequest bidRequest) {
+        log.info("Creating bid with data: {}", bidRequest);
+        BidResponse response = bidService.create(bidRequest);
+        log.info("Bid created with ID: {}", response.bidId());
         return ResponseEntity.status(201).body(response);
     }
 
@@ -36,9 +36,9 @@ public class BidController {
     }
 
     @PutMapping("/{bidId}")
-    public ResponseEntity<BidResponse> update(@PathVariable Long bidId, @Valid @RequestBody BidRequest dto) {
-        log.info("Updating bid with ID: {} using data: {}", bidId, dto);
-        BidResponse response = bidService.update(bidId, dto);
+    public ResponseEntity<BidResponse> update(@PathVariable Long bidId, @Valid @RequestBody BidRequest bidRequest) {
+        log.info("Updating bid with ID: {} using data: {}", bidId, bidRequest);
+        BidResponse response = bidService.update(bidId, bidRequest);
         log.info("Updated bid: {}", response);
         return ResponseEntity.ok(response);
     }
@@ -59,7 +59,7 @@ public class BidController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/history")
+    @GetMapping("/{bidId}/history")
     public ResponseEntity<BidResponse> history(@PathVariable Long bidId) {
         log.info("Fetching history for bid ID: {}", bidId);
         BidResponse response = bidService.get(bidId);

@@ -20,7 +20,7 @@ public class MemberController {
     public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberRequest dto) {
         log.info("Creating member with data: {}", dto);
         MemberResponse response = memberService.create(dto);
-        log.info("Member created with ID: {}", response.getMemberId());
+        log.info("Member created with ID: {}", response.memberId());
         return ResponseEntity.status(201).body(response);
     }
 

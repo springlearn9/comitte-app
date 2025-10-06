@@ -18,7 +18,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<MemberResponse> register(@Valid @RequestBody RegisterRequest dto, UriComponentsBuilder uriBuilder) {
         MemberResponse memberResponse = authService.register(dto);
-        return ResponseEntity.created(uriBuilder.path("/api/users/{id}").buildAndExpand(memberResponse.getMemberId()).toUri()).body(memberResponse);
+        return ResponseEntity.created(uriBuilder.path("/api/users/{bidId}").buildAndExpand(memberResponse.memberId()).toUri()).body(memberResponse);
     }
 
 /*    @PostMapping("/login")

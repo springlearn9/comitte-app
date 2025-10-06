@@ -5,53 +5,46 @@ import com.ls.comitte.model.entity.Bid;
 import com.ls.comitte.model.request.BidRequest;
 import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.repository.BidRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ls.comitte.util.AppUtil;
+import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BidService {
+    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private static final String BID_NOT_FOUND = "Bid not found";
     private final BidRepository bidRepository;
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public BidResponse get(Long id) {
-        return bidRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+        return bidRepository.findById(id).map(mapper::toResponse)
+                .orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
     }
 
     public List<BidResponse> getBidsByComitteId(Long comitteId) {
-        return bidRepository.findByComitteId(comitteId).stream().map(this::toDto) // if using a mapper
+        return bidRepository.findByComitteId(comitteId).stream().map(mapper::toResponse)
                 .toList();
     }
 
     @Transactional
-    public BidResponse create(BidRequest dto) {
-        Bid b = Bid.builder().comitteId(dto.getComitteId()).comitteNumber(dto.getComitteNumber()).finalBidder(dto.getFinalBidder()).finalBidAmt(dto.getFinalBidAmt()).bidDate(dto.getBidDate()).build();
-        try {
-            b.setBids(mapper.writeValueAsString(dto.getBidItems()));
-            b.setReceiversList(mapper.writeValueAsString(dto.getReceiversList()));
-        } catch (Exception e) {
-        }
-        bidRepository.save(b);
-        return toDto(b);
+    public BidResponse create(BidRequest bidRequest) {
+        Bid bid = mapper.toEntity(bidRequest);
+        bidRepository.save(bid);
+        return mapper.toResponse(bid);
     }
 
     @Transactional
-    public BidResponse update(Long id, BidRequest dto) {
-        Bid b = bidRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        b.setFinalBidAmt(dto.getFinalBidAmt());
-        b.setFinalBidder(dto.getFinalBidder());
-        try {
-            b.setBids(mapper.writeValueAsString(dto.getBidItems()));
-            b.setReceiversList(mapper.writeValueAsString(dto.getReceiversList()));
-        } catch (Exception e) {
-        }
-        bidRepository.save(b);
-        return toDto(b);
+    public BidResponse update(Long bidId, BidRequest bidRequest) {
+        Bid bid = bidRepository.findById(bidId).orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
+        AppUtil.update(bid, bidRequest);
+        bidRepository.save(bid);
+        return mapper.toResponse(bid);
     }
 
     @Transactional
@@ -61,36 +54,17 @@ public class BidService {
 
     @Transactional
     public BidResponse placeBid(Long id, BidItem bidItem) {
-        Bid b = bidRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        try {
-            List<BidItem> list = mapper.readValue(b.getBids() == null ? "[]" : b.getBids(), new TypeReference<List<BidItem>>() {
-            });
-            list.add(bidItem);
-            b.setBids(mapper.writeValueAsString(list));
-            bidRepository.save(b);
-            return toDto(b);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Bid bid = bidRepository.findById(id).orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
+        List<BidItem> bidItems = bid.getBidItems();
+        if (CollectionUtils.isEmpty(bidItems)) {
+            bidItems = new ArrayList<>();
         }
+        bidItems.add(bidItem);
+        bid.setBidItems(bidItems);
+
+        bidRepository.save(bid);
+        return mapper.toResponse(bid);
+
     }
 
-    private BidResponse toDto(Bid b) {
-        BidResponse d = new BidResponse();
-        d.setId(b.getBidId());
-        d.setComitteId(b.getComitteId());
-        d.setComitteNumber(b.getComitteNumber());
-        d.setFinalBidder(b.getFinalBidder());
-        d.setFinalBidAmt(b.getFinalBidAmt());
-        d.setBidDate(b.getBidDate());
-        try {
-            d.setBidItems(mapper.readValue(b.getBids() == null ? "[]" : b.getBids(), new TypeReference<List<BidItem>>() {
-            }));
-            d.setReceiversList(mapper.readValue(b.getReceiversList() == null ? "[]" : b.getReceiversList(), new TypeReference<List<Long>>() {
-            }));
-        } catch (Exception e) {
-        }
-        d.setCreatedTimestamp(b.getCreatedTimestamp());
-        d.setUpdatedTimestamp(b.getUpdatedTimestamp());
-        return d;
-    }
 }

@@ -20,22 +20,22 @@ public class ComitteMemberMapController {
     public ResponseEntity<ComitteMemberMapResponse> create(@Valid @RequestBody ComitteMemberMapRequest dto) {
         log.info("Creating comitte member map with data: {}", dto);
         ComitteMemberMapResponse response = service.create(dto);
-        log.info("Comitte member map created with ID: {}", response.getId());
+        log.info("Comitte member map created with ID: {}", response.id());
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ComitteMemberMapResponse> get(@PathVariable Long id) {
-        log.info("Fetching comitte member map with ID: {}", id);
+        log.info("Fetching comitte member map for ID: {}", id);
         ComitteMemberMapResponse response = service.get(id);
         log.info("Fetched comitte member map: {}", response);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ComitteMemberMapResponse> update(@PathVariable Long id, @Valid @RequestBody ComitteMemberMapRequest dto) {
-        log.info("Updating comitte member map with ID: {} using data: {}", id, dto);
-        ComitteMemberMapResponse response = service.update(id, dto);
+    public ResponseEntity<ComitteMemberMapResponse> update(@PathVariable Long id, @Valid @RequestBody ComitteMemberMapRequest request) {
+        log.info("Updating comitte member map with ID: {} using data: {}", id, request);
+        ComitteMemberMapResponse response = service.update(id, request);
         log.info("Updated comitte member map: {}", response);
         return ResponseEntity.ok(response);
     }

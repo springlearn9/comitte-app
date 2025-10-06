@@ -1,9 +1,10 @@
 package com.ls.comitte.service;
 
+import com.ls.comitte.util.AppUtil;
+import com.ls.comitte.util.ResponseMapper;
 import com.ls.comitte.model.request.MemberRequest;
 import com.ls.comitte.model.response.MemberResponse;
 import com.ls.auth.model.request.RoleAssignDto;
-import com.ls.auth.model.UserUpdateDto;
 import com.ls.comitte.model.entity.Member;
 import com.ls.auth.model.entity.Role;
 import com.ls.comitte.repository.MemberRepository;
@@ -18,28 +19,30 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private static final String MEMBER_NOT_FOUND = "Member not found";
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
 
+
     public MemberResponse get(Long id) {
-        return memberRepository.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+        return memberRepository.findById(id).map(mapper::toResponse)
+                .orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND));
     }
 
     @Transactional
-    public MemberResponse create(MemberRequest dto) {
-        Member m = Member.builder().name(dto.getName()).mobile(dto.getMobile()).aadharNo(dto.getAadharNo()).address(dto.getAddress()).build();
-        memberRepository.save(m);
-        return toDto(m);
+    public MemberResponse create(MemberRequest memberRequest) {
+        Member member = mapper.toEntity(memberRequest);
+        memberRepository.save(member);
+        return mapper.toResponse(member);
     }
 
     @Transactional
-    public MemberResponse update(Long id, UserUpdateDto dto) {
-        Member u = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        u.setUsername(dto.getUsername());
-        u.setEmail(dto.getEmail());
-        u.setMobile(dto.getMobileNumber());
-        memberRepository.save(u);
-        return toDto(u);
+    public MemberResponse update(Long id, MemberRequest memberRequest) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND));
+        AppUtil.update(member, memberRequest);
+        memberRepository.save(member);
+        return mapper.toResponse(member);
     }
 
     @Transactional
@@ -49,36 +52,12 @@ public class MemberService {
 
     @Transactional
     public MemberResponse assignRoles(Long id, RoleAssignDto dto) {
-        Member u = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        Set<Role> roles = dto.getRoleNames().stream().map(rn -> roleRepository.findByRoleName(rn).orElseThrow(() -> new RuntimeException("role not found:" + rn))).collect(Collectors.toSet());
-        u.setRoles(roles);
-        memberRepository.save(u);
-        return toDto(u);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND));
+        Set<Role> roles = dto.getRoleNames().stream().map(rn -> roleRepository.findByRoleName(rn)
+                .orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND + rn))).collect(Collectors.toSet());
+        member.setRoles(roles);
+        memberRepository.save(member);
+        return mapper.toResponse(member);
     }
 
-
-    @Transactional
-    public MemberResponse update(Long id, MemberRequest dto) {
-        Member m = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        m.setName(dto.getName());
-        m.setMobile(dto.getMobile());
-        m.setAadharNo(dto.getAadharNo());
-        m.setAddress(dto.getAddress());
-        memberRepository.save(m);
-        return toDto(m);
-    }
-
-    private MemberResponse toDto(Member member) {
-        MemberResponse memberResponse = new MemberResponse();
-        memberResponse.setMemberId(member.getMemberId());
-        memberResponse.setName(member.getName());
-        memberResponse.setEmail(member.getEmail());
-        memberResponse.setUsername(member.getUsername());
-        memberResponse.setMobile(member.getMobile());
-        memberResponse.setAadharNo(member.getAadharNo());
-        memberResponse.setAddress(member.getAddress());
-        memberResponse.setCreatedTimestamp(member.getCreatedTimestamp());
-        memberResponse.setUpdatedTimestamp(member.getUpdatedTimestamp());
-        return memberResponse;
-    }
 }

@@ -33,12 +33,13 @@ public class Member {
     private String name;
     @Column(nullable = false)
     private String aadharNo;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
     @CreatedDate
     @Column(name = "created_timestamp", updatable = false)
     private LocalDateTime createdTimestamp;
+
     @LastModifiedDate
     @Column(name = "updated_timestamp")
     private LocalDateTime updatedTimestamp;

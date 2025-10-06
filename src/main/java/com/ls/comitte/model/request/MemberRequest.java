@@ -11,5 +11,7 @@ public class MemberRequest {
     private String name;
     private String mobile;
     private String aadharNo;
+    private String password;
     private String address;
+
 }

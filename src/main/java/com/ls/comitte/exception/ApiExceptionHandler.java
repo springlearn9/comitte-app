@@ -21,7 +21,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> handleGenericException(Exception ex, WebRequest request) {
         String errorId = UUID.randomUUID().toString();
         log.error("Error ID: {}, Message: {}", errorId, ex.getMessage(), ex);
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", errorId);
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), errorId);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
