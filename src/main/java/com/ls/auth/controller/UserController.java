@@ -1,18 +1,21 @@
 package com.ls.auth.controller;
 
+import com.ls.auth.model.entity.Role;
+import com.ls.auth.model.request.RoleAssignDto;
+import com.ls.comitte.model.entity.Member;
+import com.ls.comitte.model.response.MemberResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 /*    private final UserService userService;
-
-    @GetMapping
-    public ResponseEntity<Page<UserDto>> list(Pageable p) {
-        return ResponseEntity.ok(userService.list(p));
-    }
 
     @GetMapping("/{bidId}")
     public ResponseEntity<UserDto> get(@PathVariable Long bidId) {
@@ -40,5 +43,15 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> assignRoles(@PathVariable Long bidId, @Valid @RequestBody RoleAssignDto dto) {
         return ResponseEntity.ok(userService.assignRoles(bidId, dto));
+    }*/
+
+/*    @Transactional
+    public MemberResponse assignRoles(Long id, RoleAssignDto dto) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND));
+        Set<Role> roles = dto.getRoleNames().stream().map(rn -> roleRepository.findByRoleName(rn)
+                .orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND + rn))).collect(Collectors.toSet());
+        member.setRoles(roles);
+        memberRepository.save(member);
+        return mapper.toResponse(member);
     }*/
 }

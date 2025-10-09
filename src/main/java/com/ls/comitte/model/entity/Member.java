@@ -24,16 +24,11 @@ public class Member {
     private String username;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
-    private String password;
-    @Column(name = "mobile")
-    private String mobile;
 
-    @Column(nullable = false)
+    private String mobile;
+    private String password;
     private String name;
-    @Column(nullable = false)
     private String aadharNo;
-    @Column(nullable = true)
     private String address;
 
     @CreatedDate

@@ -24,6 +24,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
 
+jwt:
+  secret: Pqhv2J9XBNyQIHFDdYih5xSwp6hE9XN6ropqZIpzqE6wByLy8xqyrWGXm1T2pkKfbKTDgy2go4b12aiQsD8wdQ==
+  expiration-ms: 3600000
+
 # ---------------------------------------------------
 # --- SpringDoc (Swagger) OpenAPI 3 Configuration ---
 # ---------------------------------------------------

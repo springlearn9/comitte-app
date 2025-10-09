@@ -7,10 +7,13 @@ import jakarta.validation.constraints.*;
 public class RegisterRequest {
     @NotBlank
     private String username;
+
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     private String password;
+
     private String mobile;
 }
