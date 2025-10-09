@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,12 +49,17 @@ public class AuthService {
     }*/
 
     private MemberResponse toDto(Member member) {
-        MemberResponse memberResponse = new MemberResponse();
-        memberResponse.setMemberId(member.getMemberId());
-        memberResponse.setUsername(member.getUsername());
-        memberResponse.setEmail(member.getEmail());
-        memberResponse.setMobile(member.getMobile());
-        memberResponse.setRoles(member.getRoles() == null ? null : member.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()));
-        return memberResponse;
+        return new MemberResponse(
+                member.getMemberId(),
+                member.getUsername(),
+                member.getEmail(),
+                member.getName(),
+                member.getMobile(),
+                member.getAadharNo(),
+                member.getAddress(),
+                member.getCreatedTimestamp(),
+                member.getUpdatedTimestamp()
+        );
     }
+
 }

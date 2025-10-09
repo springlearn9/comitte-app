@@ -25,7 +25,7 @@ public class ComitteController {
     public ResponseEntity<ComitteResponse> create(@Valid @RequestBody ComitteRequest dto) {
         log.info("Creating comitte with data: {}", dto);
         ComitteResponse response = comitteService.create(dto);
-        log.info("Comitte created with ID: {}", response.getComitteId());
+        log.info("Comitte created with ID: {}", response.comitteId());
         return ResponseEntity.status(201).body(response);
     }
 
@@ -62,9 +62,9 @@ public class ComitteController {
     }
 
     @PostMapping("/{comitteId}/assign-members")
-    public ResponseEntity<ComitteResponse> assign(@PathVariable Long id, @RequestBody List<Long> memberIds) {
-        log.info("Assigning members to comitte ID: {} with member IDs: {}", id, memberIds);
-        ComitteResponse response = comitteService.assignMembers(id, memberIds);
+    public ResponseEntity<ComitteResponse> assign(@PathVariable Long comitteId, @RequestBody List<Long> memberIds) {
+        log.info("Assigning members to comitte ID: {} with member IDs: {}", comitteId, memberIds);
+        ComitteResponse response = comitteService.assignMembers(comitteId, memberIds);
         log.info("Assigned members to comitte: {}", response);
         return ResponseEntity.ok(response);
     }

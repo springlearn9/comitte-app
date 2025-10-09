@@ -1,12 +1,12 @@
 package com.ls.comitte.model;
 
-import lombok.Data;
+import jakarta.persistence.Embeddable;
 
 import java.time.LocalDateTime;
 
-@Data
-public class BidItem {
-    private Long bidder;
-    private Integer amount;
-    private LocalDateTime timestamp;
-}
+@Embeddable
+public record BidItem(
+        Long bidder,
+        Integer amount,
+        LocalDateTime timestamp
+) {}

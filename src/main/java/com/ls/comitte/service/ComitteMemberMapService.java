@@ -4,6 +4,7 @@ import com.ls.comitte.model.request.ComitteMemberMapRequest;
 import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.model.entity.ComitteMemberMap;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
+import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -11,25 +12,29 @@ import jakarta.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ComitteMemberMapService {
+    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private static final String COMITTE_MEMBER_MAPPING_NOT_FOUND = "Comitte and member mapping not found";
     private final ComitteMemberMapRepository repo;
 
     @Transactional
-    public ComitteMemberMapResponse create(ComitteMemberMapRequest dto) {
-        ComitteMemberMap m = ComitteMemberMap.builder().comitteId(dto.getComitteId()).memberId(dto.getMemberId()).shareCount(dto.getShareCount()).build();
-        repo.save(m);
-        return toDto(m);
+    public ComitteMemberMapResponse create(ComitteMemberMapRequest comitteMemberMapRequest) {
+        ComitteMemberMap comitteMemberMap = mapper.toEntity(comitteMemberMapRequest);
+        repo.save(comitteMemberMap);
+        return mapper.toResponse(comitteMemberMap);
     }
 
     @Transactional
-    public ComitteMemberMapResponse update(Long id, ComitteMemberMapRequest dto) {
-        ComitteMemberMap m = repo.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-        m.setShareCount(dto.getShareCount());
-        repo.save(m);
-        return toDto(m);
+    public ComitteMemberMapResponse update(Long id, ComitteMemberMapRequest comitteMemberMapRequest) {
+        ComitteMemberMap comitteMemberMap = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException(COMITTE_MEMBER_MAPPING_NOT_FOUND));
+        comitteMemberMap.setShareCount(comitteMemberMapRequest.getShareCount());
+        repo.save(comitteMemberMap);
+        return mapper.toResponse(comitteMemberMap);
     }
 
     public ComitteMemberMapResponse get(Long id) {
-        return repo.findById(id).map(this::toDto).orElseThrow(() -> new RuntimeException("not found"));
+        return repo.findById(id).map(mapper::toResponse)
+                .orElseThrow(() -> new RuntimeException(COMITTE_MEMBER_MAPPING_NOT_FOUND));
     }
 
     @Transactional
@@ -37,14 +42,4 @@ public class ComitteMemberMapService {
         repo.deleteById(id);
     }
 
-    private ComitteMemberMapResponse toDto(ComitteMemberMap m) {
-        ComitteMemberMapResponse d = new ComitteMemberMapResponse();
-        d.setId(m.getId());
-        d.setComitteId(m.getComitteId());
-        d.setMemberId(m.getMemberId());
-        d.setShareCount(m.getShareCount());
-        d.setCreatedTimestamp(m.getCreatedTimestamp());
-        d.setUpdatedTimestamp(m.getUpdatedTimestamp());
-        return d;
-    }
 }

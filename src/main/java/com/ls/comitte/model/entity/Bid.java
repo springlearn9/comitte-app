@@ -1,11 +1,13 @@
 package com.ls.comitte.model.entity;
 
+import com.ls.comitte.model.BidItem;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "bids")
@@ -22,12 +24,18 @@ public class Bid {
     private Long finalBidder;
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(columnDefinition = "jsonb")
-    private String bids;
+    private List<BidItem> bidItems;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(columnDefinition = "jsonb")
-    private String receiversList;
+    private List<Long> receiversList;
+
     @CreatedDate
     private LocalDateTime createdTimestamp;
+
     @LastModifiedDate
     private LocalDateTime updatedTimestamp;
 }
