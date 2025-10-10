@@ -13,6 +13,7 @@ spring:
     init:
       platform: postgres
       mode: always
+
   # JPA/Hibernate Configuration
   jpa:
     defer-datasource-initialization: true
@@ -24,9 +25,26 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: rajauravikas@gmail.com
+    password: "pppc hinx amnt huxq"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: Pqhv2J9XBNyQIHFDdYih5xSwp6hE9XN6ropqZIpzqE6wByLy8xqyrWGXm1T2pkKfbKTDgy2go4b12aiQsD8wdQ==
   expiration-ms: 3600000
+
+email:
+  password-reset-email-subject: "Password Reset"
+  password-reset-email-body: "To reset your password, click the link below:\n {0}"
+  password-reset-token-expiry: 5
 
 # ---------------------------------------------------
 # --- SpringDoc (Swagger) OpenAPI 3 Configuration ---
