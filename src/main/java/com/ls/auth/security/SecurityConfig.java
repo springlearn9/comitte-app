@@ -32,6 +32,7 @@ public class SecurityConfig {
                         // Allow access to public endpoints without authentication
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                        .requestMatchers("/api/password/**").permitAll()
                         // Require ADMIN role for admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Any other request must be authenticated
