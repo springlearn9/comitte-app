@@ -170,3 +170,59 @@ VALUES
 
 
 
+-- seed roles/authorities
+INSERT INTO roles (role_id, role_name) VALUES (1, 'MEMBER') ON CONFLICT DO NOTHING;
+INSERT INTO roles (role_id, role_name) VALUES (2, 'ADMIN') ON CONFLICT DO NOTHING;
+
+INSERT INTO authorities (authority_id, authority_name) VALUES (1, 'MEMBER_CREATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (2, 'MEMBER_UPDATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (3, 'MEMBER_DELETE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (4, 'MEMBER_VIEW') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (5, 'MEMBER_SEARCH') ON CONFLICT DO NOTHING;
+
+INSERT INTO authorities (authority_id, authority_name) VALUES (11, 'COMITTE_CREATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (12, 'COMITTE_UPDATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (13, 'COMITTE_DELETE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (14, 'COMITTE_VIEW') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (15, 'COMITTE_SEARCH') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (16, 'ASSIGN_MEMBER_IN_COMITTE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (17, 'GET_COMITTE_BIDS') ON CONFLICT DO NOTHING;
+
+
+INSERT INTO authorities (authority_id, authority_name) VALUES (21, 'BID_CREATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (22, 'BID_UPDATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (23, 'BID_DELETE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (24, 'BID_VIEW') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (25, 'BID_SEARCH') ON CONFLICT DO NOTHING;
+
+INSERT INTO authorities (authority_id, authority_name) VALUES (31, 'COMITTE_MEMBER_MAP_CREATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (32, 'COMITTE_MEMBER_MAP_UPDATE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (33, 'COMITTE_MEMBER_MAP_DELETE') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (34, 'COMITTE_MEMBER_MAP_VIEW') ON CONFLICT DO NOTHING;
+INSERT INTO authorities (authority_id, authority_name) VALUES (35, 'COMITTE_MEMBER_MAP_SEARCH') ON CONFLICT DO NOTHING;
+
+-- map roles to authorities simple
+insert into role_authority_map(role_id, authority_id) values
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 31),
+(1, 32),
+(1, 33),
+(1, 34),
+(1, 35);
+
