@@ -6,10 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class ComitteApp {
+public class ComitteServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(ComitteApp.class, args);
+        SpringApplication.run(ComitteServiceApp.class, args);
     }
-
-    // ;jjfkdlfd
 }

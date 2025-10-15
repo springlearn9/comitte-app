@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -45,33 +46,75 @@ public class ForgetPasswordService {
     @Value("${email.password-reset-token-expiry}")
     private Long passwordResetTokenExpiry;
 
+    private SecureRandom secureRandom = new SecureRandom();
 
     public void requestPasswordReset(PasswordResetRequest request) {
-        Optional<Member> member = memberRepository.findByEmail(request.getEmail());
-        if (member.isEmpty()) {
-            log.error("Email not found: {}", request.getEmail());
-            throw new RuntimeException("Email not found");
-        }
-
-        String token = UUID.randomUUID().toString();
-        PasswordResetToken resetToken = new PasswordResetToken(null,token, member.get(),LocalDateTime.now().plusMinutes(passwordResetTokenExpiry));
+        String userNameOrEmail = request.getUsernameOrEmail();
+        Optional<Member> member = getMemberByUsernameOrEmail(userNameOrEmail);
+        PasswordResetToken resetToken = preparePasswordResetToken(member.get());
         passwordResetTokenRepository.save(resetToken);
-
-        String resetLink = "http://localhost:8082/api/password/reset?token="+token;
-        String emailBody = MessageFormat.format(passwordResetEmailBody, resetLink);
-        emailService.sendSimpleEmail(request.getEmail(), passwordResetEmailSubject, emailBody);
-        log.info("Password reset email sent to: {}", request.getEmail());
+        sendPasswordResetEmail(userNameOrEmail, resetToken);
+        log.info("Password reset email sent to: {}", request.getUsernameOrEmail());
     }
 
     public void resetPassword(PasswordUpdateRequest request) {
-        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken())
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
-
-        Member member = resetToken.getMember();
+        Member member = validateTokenAndGetMember(request);
         member.setPassword(passwordEncoder.encode(request.getNewPassword()));
         memberRepository.save(member);
-
-        passwordResetTokenRepository.delete(resetToken);
-        log.info("Password reset successfully for user: {}", member.getUsername());
+        log.info("Password reset successfull for user: {}", member.getUsername());
     }
+
+   private Member validateTokenAndGetMember(PasswordUpdateRequest request) {
+       Member member = null;
+        if(request.getToken()!=null) {
+            Optional<PasswordResetToken> resetTokenOptional = passwordResetTokenRepository.findByToken(request.getToken());
+            if(resetTokenOptional.isPresent()) {
+                passwordResetTokenRepository.delete(resetTokenOptional.get());
+                member = resetTokenOptional.get().getMember();
+            }
+            else {
+                log.error("token invalid or not exists");
+                throw new RuntimeException("token invalid or not exists");
+            }
+        } else {
+            member = getMemberByUsernameOrEmail(request.getUsernameOrEmail()).get();
+            Optional<PasswordResetToken> resetTokenOptional = passwordResetTokenRepository.findByMember(member);
+            if(request.getOtp().equals(resetTokenOptional.get().getOtp())) {
+                passwordResetTokenRepository.delete(resetTokenOptional.get());
+                log.info("otp validation successfull for user: {}", member.getEmail());
+            }
+            else {
+                log.error("otp validation failed for user: {}", member.getEmail());
+                throw new RuntimeException("otp validation failed");
+            }
+        }
+        return member;
+    }
+
+
+    private void sendPasswordResetEmail(String userNameOrEmail, PasswordResetToken resetToken) {
+        String resetLink = "http://localhost:8082/api/password/reset?token="+ resetToken.getToken();
+        String emailBody = MessageFormat.format(passwordResetEmailBody, resetLink, resetToken.getOtp());
+        emailService.sendSimpleEmail(userNameOrEmail, passwordResetEmailSubject, emailBody);
+    }
+
+    private Optional<Member> getMemberByUsernameOrEmail(String userNameOrEmail) {
+        Optional<Member> member = memberRepository.findByUsername(userNameOrEmail);
+        if (member.isEmpty()) {
+            member = memberRepository.findByEmail(userNameOrEmail);
+            if (member.isEmpty()) {
+                log.error("User {} not found", userNameOrEmail);
+                throw new RuntimeException("User record not found");
+            }
+        }
+        return member;
+    }
+
+    private PasswordResetToken preparePasswordResetToken(Member member) {
+        String otp = String.valueOf(secureRandom.nextInt(100000, 900000));
+        String token = UUID.randomUUID().toString();
+        LocalDateTime tokenExpiryTime = LocalDateTime.now().plusMinutes(passwordResetTokenExpiry);
+        return new PasswordResetToken(null, token, otp, member, tokenExpiryTime);
+    }
+
 }

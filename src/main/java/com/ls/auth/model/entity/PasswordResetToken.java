@@ -18,7 +18,7 @@ public class PasswordResetToken {
     private Long id;
 
     private String token;
-
+    private String otp;
     @OneToOne
     private Member member;
 

@@ -43,7 +43,7 @@ jwt:
 
 email:
   password-reset-email-subject: "Password Reset"
-  password-reset-email-body: "To reset your password, click the link below:\n {0}"
+  password-reset-email-body: "To reset your password, click the link below:\n {0} \n       or \n Enter otp: {1}"
   password-reset-token-expiry: 5
 
 # ---------------------------------------------------
