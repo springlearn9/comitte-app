@@ -7,7 +7,7 @@ import com.ls.comitte.model.request.BidRequest;
 import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.request.MemberRequest;
 
-public class AppUtil {
+public class ServiceUtil {
     public static Member update(Member member, MemberRequest memberRequest) {
         if (memberRequest.getUsername() != null) {
             member.setUsername(memberRequest.getUsername());

@@ -1,6 +1,6 @@
 package com.ls.comitte.service;
 
-import com.ls.comitte.util.AppUtil;
+import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import com.ls.comitte.model.request.MemberRequest;
 import com.ls.comitte.model.response.MemberResponse;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class MemberService {
     @Transactional
     public MemberResponse update(Long id, MemberRequest memberRequest) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException(MEMBER_NOT_FOUND));
-        AppUtil.update(member, memberRequest);
+        ServiceUtil.update(member, memberRequest);
         memberRepository.save(member);
         return mapper.toResponse(member);
     }
@@ -60,4 +61,8 @@ public class MemberService {
         return mapper.toResponse(member);
     }
 
+    public List<MemberResponse> searchMembers(String name, String mobile, String username) {
+        List<Member> members = memberRepository.findByNameOrMobileOrUsername(name, mobile, username);
+        return members.stream().map(mapper::toResponse).collect(Collectors.toList());
+    }
 }

@@ -5,7 +5,7 @@ import com.ls.comitte.model.entity.Bid;
 import com.ls.comitte.model.request.BidRequest;
 import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.repository.BidRepository;
-import com.ls.comitte.util.AppUtil;
+import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class BidService {
     @Transactional
     public BidResponse update(Long bidId, BidRequest bidRequest) {
         Bid bid = bidRepository.findById(bidId).orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
-        AppUtil.update(bid, bidRequest);
+        ServiceUtil.update(bid, bidRequest);
         bidRepository.save(bid);
         return mapper.toResponse(bid);
     }

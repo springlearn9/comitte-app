@@ -7,7 +7,7 @@ import com.ls.comitte.model.entity.ComitteMemberMap;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.comitte.repository.MemberRepository;
-import com.ls.comitte.util.AppUtil;
+import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class ComitteService {
     public ComitteResponse update(Long comitteId, ComitteRequest comitteRequest) {
         Comitte comitte = comitteRepository.findById(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
-        AppUtil.update(comitte, comitteRequest);
+        ServiceUtil.update(comitte, comitteRequest);
         comitteRepository.save(comitte);
         return mapper.toResponse(comitte);
     }
@@ -64,6 +64,13 @@ public class ComitteService {
 
     public List<ComitteResponse> getMemberComittes(Long memberId) {
         return comitteRepository.findComittesByMemberId(memberId)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
+    public List<ComitteResponse> getOwnerComittes(Long ownerId) {
+        return comitteRepository.findComittesByOwnerId(ownerId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();

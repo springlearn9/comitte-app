@@ -39,7 +39,7 @@ spring:
 
 jwt:
   secret: Pqhv2J9XBNyQIHFDdYih5xSwp6hE9XN6ropqZIpzqE6wByLy8xqyrWGXm1T2pkKfbKTDgy2go4b12aiQsD8wdQ==
-  expiration-ms: 3600000
+  expiration-ms: 360000000
 
 email:
   password-reset-email-subject: "Password Reset"

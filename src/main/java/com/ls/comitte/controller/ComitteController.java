@@ -45,6 +45,14 @@ public class ComitteController {
         return ResponseEntity.ok(comittes);
     }
 
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<ComitteResponse>> getOwnerComittes(@PathVariable Long ownerId) {
+        log.info("Fetching comittes for owner ID: {}", ownerId);
+        List<ComitteResponse> comittes = comitteService.getOwnerComittes(ownerId);
+        log.info("Fetched comittes: {}", comittes);
+        return ResponseEntity.ok(comittes);
+    }
+
     @PutMapping("/{comitteId}")
     public ResponseEntity<ComitteResponse> update(@PathVariable Long comitteId, @Valid @RequestBody ComitteRequest dto) {
         log.info("Updating comitte with ID: {} using data: {}", comitteId, dto);

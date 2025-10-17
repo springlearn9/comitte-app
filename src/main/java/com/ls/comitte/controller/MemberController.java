@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
@@ -46,5 +48,15 @@ public class MemberController {
         memberService.delete(memberId);
         log.info("Deleted member with ID: {}", memberId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<MemberResponse>> searchMembers(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String mobile,
+            @RequestParam(required = false) String username) {
+
+        List<MemberResponse> members = memberService.searchMembers(name, mobile, username);
+        return ResponseEntity.ok(members);
     }
 }

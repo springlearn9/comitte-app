@@ -16,16 +16,16 @@ INSERT INTO members (
 	username, email, password, mobile, name, 
 	"aadhar_no", address, created_timestamp, updated_timestamp
 ) VALUES
-('bippan.khichra', 'bippan.k@example.com', 'password123', '8449761645', 'Bippan Khichra', '513022260012', '123 Kirti Nagar, New Delhi', NOW(), NOW()),
-('vikas.rajaura', 'vikas.r@example.com', 'password123', '7827593310', 'Vikas Rajaura', '513022260032', '456 Sector 18, Noida', NOW(), NOW()),
-('harendra.singh', 'harendra.s@example.com', 'password123', '8505848064', 'Harendra Singh', '608512345678', '789 Malviya Nagar, Jaipur', NOW(), NOW()),
-('sundar.tyagi', 'sundar.t@example.com', 'password123', '9917786273', 'Sundar Tyagi', '608598765432', '101 Civil Lines, Meerut', NOW(), NOW()),
-('ajit.kastley', 'ajit.k@example.com', 'password123', '9557285517', 'Ajit Kastley', '337511223344', '212 Rajpur Road, Dehradun', NOW(), NOW()),
-('sanjay.tyagi', 'sanjay.t@example.com', 'password123', '9876543210', 'Sanjay Tyagi', '063199887766', '333 Gandhi Chowk, Ghaziabad', NOW(), NOW()),
-('priya.sharma', 'priya.s@example.com', 'password123', '9988776655', 'Priya Sharma', '778899001122', '5th Avenue, Gurgaon', NOW(), NOW()),
-('rahul.verma', 'rahul.v@example.com', 'password123', '9123456789', 'Rahul Verma', '112233445566', 'Lajpat Nagar, New Delhi', NOW(), NOW()),
-('anisha.gupta', 'anisha.g@example.com', 'password123', '9555666777', 'Anisha Gupta', '445566778899', 'Sector 15, Chandigarh', NOW(), NOW()),
-('mohan.joshi', 'mohan.j@example.com', 'password123', '8877665544', 'Mohan Joshi', '998877665544', '44B Park Street, Kolkata', NOW(), NOW());
+('bippan.khichra', 'bippan.k@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '8449761645', 'Bippan Khichra', '513022260012', '123 Kirti Nagar, New Delhi', NOW(), NOW()),
+('vikas.rajaura', 'vikas.r@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '7827593310', 'Vikas Rajaura', '513022260032', '456 Sector 18, Noida', NOW(), NOW()),
+('harendra.singh', 'harendra.s@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '8505848064', 'Harendra Singh', '608512345678', '789 Malviya Nagar, Jaipur', NOW(), NOW()),
+('sundar.tyagi', 'sundar.t@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9917786273', 'Sundar Tyagi', '608598765432', '101 Civil Lines, Meerut', NOW(), NOW()),
+('ajit.kastley', 'ajit.k@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9557285517', 'Ajit Kastley', '337511223344', '212 Rajpur Road, Dehradun', NOW(), NOW()),
+('sanjay.tyagi', 'sanjay.t@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9876543210', 'Sanjay Tyagi', '063199887766', '333 Gandhi Chowk, Ghaziabad', NOW(), NOW()),
+('priya.sharma', 'priya.s@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9988776655', 'Priya Sharma', '778899001122', '5th Avenue, Gurgaon', NOW(), NOW()),
+('rahul.verma', 'rahul.v@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9123456789', 'Rahul Verma', '112233445566', 'Lajpat Nagar, New Delhi', NOW(), NOW()),
+('anisha.gupta', 'anisha.g@example.com', '$2a$10$ix4H8Tvaga./6cYdkpZCxuzzXU3I62ahG2tBPI04PUkfW7qOzSWim', '9555666777', 'Anisha Gupta', '445566778899', 'Sector 15, Chandigarh', NOW(), NOW()),
+('mohan.joshi', 'mohan.j@example.com', 'test123', '8877665544', 'Mohan Joshi', '998877665544', '44B Park Street, Kolkata', NOW(), NOW());
 
 
 INSERT INTO comittes (

@@ -35,8 +35,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers("/api/password/**").permitAll()
-                        .requestMatchers("/api/comittes/**", "/api/members/**").hasRole("MEMBER")
-                        .requestMatchers("/api/bids/**", "/api/comitte-member-map/**").hasRole("MEMBER")
+                        .requestMatchers("/api/comittes/**", "/api/members/**").permitAll()
+                        .requestMatchers("/api/bids/**", "/api/comitte-member-map/**").permitAll()
                         // Require ADMIN role for admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Any other request must be authenticated
@@ -54,9 +54,12 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000") // or your frontend URL
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000") // frontend origin (use exact origin in prod)
+                        .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true)
+                        .maxAge(3600);
             }
         };
     }
