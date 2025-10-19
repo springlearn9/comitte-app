@@ -3,6 +3,7 @@ package com.ls.comitte.controller;
 import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
+import com.ls.comitte.model.response.MemberResponse;
 import com.ls.comitte.service.BidService;
 import com.ls.comitte.service.ComitteService;
 import lombok.RequiredArgsConstructor;
@@ -83,5 +84,11 @@ public class ComitteController {
         List<BidResponse> bids = bidService.getBidsByComitteId(comitteId);
         log.info("Fetched bids: {}", bids);
         return ResponseEntity.ok(bids);
+    }
+
+    @GetMapping("/{comitteId}/members")
+    public ResponseEntity<List<MemberResponse>> getAllAssociatedMembers(@PathVariable Long comitteId) {
+        List<MemberResponse> members = comitteService.getAllAssociatedMembers(comitteId);
+        return ResponseEntity.ok(members);
     }
 }

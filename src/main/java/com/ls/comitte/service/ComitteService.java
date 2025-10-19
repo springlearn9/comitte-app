@@ -4,6 +4,7 @@ import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
 import com.ls.comitte.model.entity.Comitte;
 import com.ls.comitte.model.entity.ComitteMemberMap;
+import com.ls.comitte.model.response.MemberResponse;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.comitte.repository.MemberRepository;
@@ -74,6 +75,10 @@ public class ComitteService {
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+    }
+
+    public List<MemberResponse> getAllAssociatedMembers(Long comitteId) {
+        return comitteMemberMapRepository.findMembersByComitteId(comitteId).stream().map(mapper::toResponse).toList();
     }
 
 }
