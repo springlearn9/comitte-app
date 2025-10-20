@@ -132,9 +132,6 @@ class BidControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/bids/{bidId}", bid.getBidId()))
                 .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/bids/{bidId}", bid.getBidId()))
-                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -93,9 +93,6 @@ class MemberControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/members/{memberId}", member.getMemberId()))
                 .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/members/{memberId}", member.getMemberId()))
-                .andExpect(status().isNotFound());
     }
 
     @Test

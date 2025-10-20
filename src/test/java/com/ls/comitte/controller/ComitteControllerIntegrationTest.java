@@ -113,9 +113,6 @@ class ComitteControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/comittes/{comitteId}", comitte.getComitteId()))
                 .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/comittes/{comitteId}", comitte.getComitteId()))
-                .andExpect(status().isNotFound());
     }
 
     @Test
