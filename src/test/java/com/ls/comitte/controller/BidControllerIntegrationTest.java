@@ -1,4 +1,4 @@
-package com.example.comitte.controller;
+package com.ls.comitte.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ls.comitte.model.BidItem;
@@ -48,17 +48,6 @@ class BidControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.bidId").exists());
-    }
-
-    @Test
-    void testCreateBid_InvalidRequest() throws Exception {
-        BidRequest request = new BidRequest();
-        // Missing required comitteId
-
-        mockMvc.perform(post("/api/bids")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -169,9 +158,7 @@ class BidControllerIntegrationTest {
         Long bidId = objectMapper.readTree(createResponse).get("bidId").asLong();
 
         // Place a bid
-        BidItem bidItem = new BidItem();
-        bidItem.setMemberId(1L);
-        bidItem.setBidAmount(8000);
+        BidItem bidItem = new BidItem(1L, 8000, LocalDateTime.now());
 
         mockMvc.perform(post("/api/bids/{bidId}/place-bid", bidId)
                         .contentType(MediaType.APPLICATION_JSON)

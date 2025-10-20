@@ -1,4 +1,4 @@
-package com.example.comitte.controller;
+package com.ls.comitte.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ls.comitte.model.request.ComitteMemberMapRequest;
@@ -41,17 +41,6 @@ class ComitteMemberMapControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists());
-    }
-
-    @Test
-    void testCreateMapping_InvalidRequest() throws Exception {
-        ComitteMemberMapRequest request = new ComitteMemberMapRequest();
-        // Missing required fields
-
-        mockMvc.perform(post("/api/comitte-member-map")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test

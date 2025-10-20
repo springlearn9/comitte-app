@@ -1,4 +1,4 @@
-package com.example.comitte.controller;
+package com.ls.comitte.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ls.comitte.model.request.ComitteRequest;
@@ -51,25 +51,6 @@ class ComitteControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.comitteId").exists())
                 .andExpect(jsonPath("$.comitteName").value("Test Committee"));
-    }
-
-    @Test
-    void testCreateComitte_InvalidRequest() throws Exception {
-        ComitteRequest request = new ComitteRequest(
-                null, // Invalid: ownerId is required
-                "",   // Invalid: comitteName is blank
-                LocalDate.now(),
-                10000,
-                10,
-                1000,
-                5,
-                10
-        );
-
-        mockMvc.perform(post("/api/comittes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test

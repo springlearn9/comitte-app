@@ -1,4 +1,4 @@
-package com.example.comitte.test;
+package com.ls.comitte.test;
 
 import java.util.HashMap;
 import java.util.Map;

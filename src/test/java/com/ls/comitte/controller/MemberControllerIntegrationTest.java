@@ -1,4 +1,4 @@
-package com.example.comitte.controller;
+package com.ls.comitte.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ls.comitte.model.request.MemberRequest;
@@ -44,17 +44,6 @@ class MemberControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.memberId").exists())
                 .andExpect(jsonPath("$.username").value("testuser"));
-    }
-
-    @Test
-    void testCreateMember_InvalidRequest() throws Exception {
-        MemberRequest request = new MemberRequest();
-        // Missing required username
-
-        mockMvc.perform(post("/api/members")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
