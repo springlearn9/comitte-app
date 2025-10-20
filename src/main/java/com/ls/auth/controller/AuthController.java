@@ -38,7 +38,7 @@ public class AuthController {
      * Creates a new user account with the provided credentials and profile information.
      * The password is hashed before storage, and a user profile is created.
      * 
-     * Request: RegisterDto containing username, email, password, and optional mobile
+     * Request: RegisterRequest containing username, email, password, and optional mobile
      * Response: 201 Created with MemberResponse containing user profile (excludes password)
      * 
      * HTTP Status Codes:
