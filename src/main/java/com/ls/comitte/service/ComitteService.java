@@ -97,7 +97,7 @@ public class ComitteService {
      * Helper method to enrich ComitteResponse with bids count
      */
     private ComitteResponse enrichWithBidsCount(ComitteResponse response) {
-        Long bidsCount = bidRepository.countByComitteId(response.comitteId());
+        Long bidsCount = bidRepository.countByComitte_ComitteId(response.comitteId());
         return new ComitteResponse(
             response.comitteId(),
             response.ownerId(),

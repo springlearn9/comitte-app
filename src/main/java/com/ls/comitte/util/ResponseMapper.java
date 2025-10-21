@@ -26,6 +26,10 @@ public interface ResponseMapper {
     @Mapping(source = "owner.name", target = "ownerName")
     ComitteResponse toResponse(Comitte comitte);
 
+    @Mapping(source = "comitte.comitteId", target = "comitteId")
+    @Mapping(source = "comitte.comitteName", target = "comitteName")
+    @Mapping(source = "finalBidder.memberId", target = "finalBidderId")
+    @Mapping(source = "finalBidder.name", target = "finalBidderName")
     BidResponse toResponse(Bid bid);
     ComitteMemberMapResponse toResponse(ComitteMemberMap comitteMemberMap);
 
@@ -44,6 +48,8 @@ public interface ResponseMapper {
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
     @Mapping(target = "bidId", ignore = true)
+    @Mapping(target = "comitte", ignore = true)
+    @Mapping(target = "finalBidder", ignore = true)
     Bid toEntity(BidRequest bidRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)

@@ -60,9 +60,8 @@ public class ServiceUtil {
     }
 
     public static void update(Bid bid, BidRequest bidRequest) {
-        if (bidRequest.getComitteId() != null) {
-            bid.setComitteId(bidRequest.getComitteId());
-        }
+        // Note: Committee and final bidder relationships are handled in BidService
+        // to ensure proper entity relationships are maintained
         if (bidRequest.getComitteNumber() != null) {
             bid.setComitteNumber(bidRequest.getComitteNumber());
         }

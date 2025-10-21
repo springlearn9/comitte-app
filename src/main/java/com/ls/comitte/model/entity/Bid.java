@@ -19,9 +19,17 @@ public class Bid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bidId;
-    private Long comitteId;
+    
+    @ManyToOne
+    @JoinColumn(name = "comitteId", referencedColumnName = "comitteId")
+    private Comitte comitte;
+    
     private Integer comitteNumber;
-    private Long finalBidder;
+    
+    @ManyToOne
+    @JoinColumn(name = "finalBidder", referencedColumnName = "memberId")
+    private Member finalBidder;
+    
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
 

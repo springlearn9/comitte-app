@@ -10,8 +10,10 @@ import java.util.List;
 public record BidResponse(
         Long bidId,
         Long comitteId,
+        String comitteName,
         Integer comitteNumber,
-        Long finalBidder,
+        Long finalBidderId,
+        String finalBidderName,
         Integer finalBidAmt,
         LocalDateTime bidDate,
         List<BidItem> bidItems,
