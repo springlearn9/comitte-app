@@ -1,5 +1,6 @@
 package com.ls.comitte.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public record ComitteResponse(
         Integer fullShare,
         Integer dueDateDays,
         Integer paymentDateDays,
+        Integer bidsCount,
         LocalDateTime createdTimestamp,
         LocalDateTime updatedTimestamp
 ) {
@@ -29,6 +31,14 @@ public record ComitteResponse(
                 membersCount,
                 fullShare,
                 startDate.format(formatter));
+    }
+
+    // Method to display bids count ratio as "bidsCount/membersCount"
+    @JsonIgnore
+    public String getBidsRatio() {
+        return String.format("%d/%d", 
+                bidsCount != null ? bidsCount : 0, 
+                membersCount != null ? membersCount : 0);
     }
 
 }

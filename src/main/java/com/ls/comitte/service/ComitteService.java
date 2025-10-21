@@ -9,6 +9,7 @@ import com.ls.comitte.model.response.MemberResponse;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.comitte.repository.MemberRepository;
+import com.ls.comitte.repository.BidRepository;
 import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,12 @@ public class ComitteService {
     private final ComitteRepository comitteRepository;
     private final MemberRepository memberRepository;
     private final ComitteMemberMapRepository comitteMemberMapRepository;
+    private final BidRepository bidRepository;
 
     public ComitteResponse get(Long comitteId) {
-        return comitteRepository.findById(comitteId).map(mapper::toResponse)
+        Comitte comitte = comitteRepository.findById(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
+        return enrichWithBidsCount(mapper.toResponse(comitte));
     }
 
     @Transactional
@@ -42,7 +45,7 @@ public class ComitteService {
         comitte.setOwner(owner);
         
         comitteRepository.save(comitte);
-        return mapper.toResponse(comitte);
+        return enrichWithBidsCount(mapper.toResponse(comitte));
     }
 
     @Transactional
@@ -51,7 +54,7 @@ public class ComitteService {
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         ServiceUtil.update(comitte, comitteRequest);
         comitteRepository.save(comitte);
-        return mapper.toResponse(comitte);
+        return enrichWithBidsCount(mapper.toResponse(comitte));
     }
 
     @Transactional
@@ -67,25 +70,58 @@ public class ComitteService {
             ComitteMemberMap comitteMemberMap = ComitteMemberMap.builder().comitteId(comitteId).memberId(mid).shareCount(1).build();
             comitteMemberMapRepository.save(comitteMemberMap);
         }
-        return mapper.toResponse(comitte);
+        return enrichWithBidsCount(mapper.toResponse(comitte));
     }
 
     public List<ComitteResponse> getMemberComittes(Long memberId) {
-        return comitteRepository.findComittesByMemberId(memberId)
+        List<ComitteResponse> responses = comitteRepository.findComittesByMemberId(memberId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+        return enrichListWithBidsCount(responses);
     }
 
     public List<ComitteResponse> getOwnerComittes(Long ownerId) {
-        return comitteRepository.findComittesByOwnerId(ownerId)
+        List<ComitteResponse> responses = comitteRepository.findComittesByOwnerId(ownerId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
+        return enrichListWithBidsCount(responses);
     }
 
     public List<MemberResponse> getAllAssociatedMembers(Long comitteId) {
         return comitteMemberMapRepository.findMembersByComitteId(comitteId).stream().map(mapper::toResponse).toList();
+    }
+
+    /**
+     * Helper method to enrich ComitteResponse with bids count
+     */
+    private ComitteResponse enrichWithBidsCount(ComitteResponse response) {
+        Long bidsCount = bidRepository.countByComitteId(response.comitteId());
+        return new ComitteResponse(
+            response.comitteId(),
+            response.ownerId(),
+            response.ownerName(),
+            response.comitteName(),
+            response.startDate(),
+            response.fullAmount(),
+            response.membersCount(),
+            response.fullShare(),
+            response.dueDateDays(),
+            response.paymentDateDays(),
+            bidsCount.intValue(),
+            response.createdTimestamp(),
+            response.updatedTimestamp()
+        );
+    }
+
+    /**
+     * Helper method to enrich list of ComitteResponse with bids count
+     */
+    private List<ComitteResponse> enrichListWithBidsCount(List<ComitteResponse> responses) {
+        return responses.stream()
+                .map(this::enrichWithBidsCount)
+                .toList();
     }
 
 }
