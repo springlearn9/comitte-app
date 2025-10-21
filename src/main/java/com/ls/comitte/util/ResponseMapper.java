@@ -21,6 +21,9 @@ public interface ResponseMapper {
     ResponseMapper INSTANCE = Mappers.getMapper(ResponseMapper.class);
 
     MemberResponse toResponse(Member member);
+    
+    @Mapping(source = "owner.memberId", target = "ownerId")
+    @Mapping(source = "owner.name", target = "ownerName")
     ComitteResponse toResponse(Comitte comitte);
 
     BidResponse toResponse(Bid bid);
@@ -34,13 +37,17 @@ public interface ResponseMapper {
 
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "comitteId", ignore = true)
+    @Mapping(target = "owner", ignore = true)
     Comitte toEntity(ComitteRequest comitteRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "bidId", ignore = true)
     Bid toEntity(BidRequest bidRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "id", ignore = true)
     ComitteMemberMap toEntity(ComitteMemberMapRequest comitteMemberMapRequest);
 }

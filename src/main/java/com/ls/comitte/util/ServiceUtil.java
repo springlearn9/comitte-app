@@ -35,9 +35,7 @@ public class ServiceUtil {
     }
 
     public static void update(Comitte comitte, ComitteRequest comitteRequest) {
-        if (comitteRequest.getOwnerId() != null) {
-            comitte.setOwnerId(comitteRequest.getOwnerId());
-        }
+        // Note: Owner is typically not updated after committee creation
         if (comitteRequest.getComitteName() != null) {
             comitte.setComitteName(comitteRequest.getComitteName());
         }

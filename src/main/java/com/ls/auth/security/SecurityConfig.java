@@ -55,7 +55,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") // frontend origin (use exact origin in prod)
+                        .allowedOrigins("http://localhost:3000","http://localhost:5173","http://localhost:5174", "http://localhost:5175") // frontend origin (use exact origin in prod)
                         .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)

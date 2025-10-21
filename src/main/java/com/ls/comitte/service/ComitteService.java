@@ -4,6 +4,7 @@ import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
 import com.ls.comitte.model.entity.Comitte;
 import com.ls.comitte.model.entity.ComitteMemberMap;
+import com.ls.comitte.model.entity.Member;
 import com.ls.comitte.model.response.MemberResponse;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
@@ -34,6 +35,12 @@ public class ComitteService {
     @Transactional
     public ComitteResponse create(ComitteRequest comitteRequest) {
         Comitte comitte = mapper.toEntity(comitteRequest);
+        
+        // Set the owner from ownerId
+        Member owner = memberRepository.findById(comitteRequest.getOwnerId())
+                .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + comitteRequest.getOwnerId()));
+        comitte.setOwner(owner);
+        
         comitteRepository.save(comitte);
         return mapper.toResponse(comitte);
     }

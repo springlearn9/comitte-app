@@ -21,7 +21,11 @@ public class Comitte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long comitteId;
-    private Long ownerId;
+
+    @ManyToOne
+    @JoinColumn(name = "ownerId", referencedColumnName = "memberId", nullable = false)
+    private Member owner;
+
     private String comitteName;
     private LocalDate startDate;
     private Integer fullAmount;

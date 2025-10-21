@@ -14,6 +14,6 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
     List<Comitte> findComittesByMemberId(@Param("memberId") Long memberId);
 
     // find all comittes for a owner
-    @Query("SELECT c FROM Comitte c WHERE c.ownerId = :ownerId")
+    @Query("SELECT c FROM Comitte c WHERE c.owner.memberId = :ownerId")
     List<Comitte> findComittesByOwnerId(@Param("ownerId") Long ownerId);
 }
