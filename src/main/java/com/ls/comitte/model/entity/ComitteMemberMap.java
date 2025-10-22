@@ -17,11 +17,20 @@ public class ComitteMemberMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long comitteId;
-    private Long memberId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comitte_id", referencedColumnName = "comitteId")
+    private Comitte comitte;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "memberId")
+    private Member member;
+    
     private Integer shareCount;
+    
     @CreatedDate
     private LocalDateTime createdTimestamp;
+    
     @LastModifiedDate
     private LocalDateTime updatedTimestamp;
 }

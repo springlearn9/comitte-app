@@ -31,6 +31,13 @@ public interface ResponseMapper {
     @Mapping(source = "finalBidder.memberId", target = "finalBidderId")
     @Mapping(source = "finalBidder.name", target = "finalBidderName")
     BidResponse toResponse(Bid bid);
+    
+    // Map from relationships directly
+    @Mapping(source = "comitte.comitteId", target = "comitteId")
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "comitte.comitteName", target = "comitteName")
+    @Mapping(source = "member.name", target = "memberName")
+    @Mapping(source = "member.mobile", target = "memberMobile")
     ComitteMemberMapResponse toResponse(ComitteMemberMap comitteMemberMap);
 
 
@@ -55,5 +62,7 @@ public interface ResponseMapper {
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "comitte", ignore = true)
+    @Mapping(target = "member", ignore = true)
     ComitteMemberMap toEntity(ComitteMemberMapRequest comitteMemberMapRequest);
 }

@@ -1,6 +1,7 @@
 package com.ls.comitte.controller;
 
 import com.ls.comitte.model.response.BidResponse;
+import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
 import com.ls.comitte.model.response.MemberResponse;
@@ -293,12 +294,12 @@ public class ComitteController {
      * </p>
      * 
      * @param comitteId the ID of the committee to retrieve members for
-     * @return ResponseEntity with List of MemberResponse and HTTP 200 status
+     * @return ResponseEntity with List of ComitteMemberMapResponse and HTTP 200 status
      */
     @GetMapping("/{comitteId}/members")
-    public ResponseEntity<List<MemberResponse>> getAllAssociatedMembers(@PathVariable Long comitteId) {
-        log.info("Fetching members for comitte ID: {}", comitteId);
-        List<MemberResponse> members = comitteService.getAllAssociatedMembers(comitteId);
+    public ResponseEntity<List<ComitteMemberMapResponse>> getAllAssociatedMembers(@PathVariable Long comitteId) {
+        log.info("Fetching ComitteMemberMapResponse for comitte ID: {}", comitteId);
+        List<ComitteMemberMapResponse> members = comitteService.getAllAssociatedMembers(comitteId);
         return ResponseEntity.ok(members);
     }
 }

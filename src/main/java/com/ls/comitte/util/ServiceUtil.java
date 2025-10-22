@@ -65,9 +65,7 @@ public class ServiceUtil {
         if (bidRequest.getComitteNumber() != null) {
             bid.setComitteNumber(bidRequest.getComitteNumber());
         }
-        if (bidRequest.getFinalBidder() != null) {
-            bid.setFinalBidder(bidRequest.getFinalBidder());
-        }
+        // finalBidder relationship is handled in BidService, not here
         if (bidRequest.getFinalBidAmt() != null) {
             bid.setFinalBidAmt(bidRequest.getFinalBidAmt());
         }

@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface ComitteMemberMapRepository extends JpaRepository<ComitteMemberMap, Long> {
 
-    @Query("SELECT m FROM Member m JOIN ComitteMemberMap cmm ON m.id = cmm.memberId WHERE cmm.comitteId = :comitteId")
+    @Query("SELECT m FROM Member m JOIN ComitteMemberMap cmm ON m.memberId = cmm.member.memberId WHERE cmm.comitte.comitteId = :comitteId")
     List<Member> findMembersByComitteId(Long comitteId);
+
+    // Find ComitteMemberMap entities by comitte ID
+    List<ComitteMemberMap> findByComitte_ComitteId(Long comitteId);
 
 }

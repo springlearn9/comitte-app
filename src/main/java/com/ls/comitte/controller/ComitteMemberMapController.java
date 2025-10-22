@@ -151,4 +151,6 @@ public class ComitteMemberMapController {
         log.info("Deleted comitte member map with ID: {}", id);
         return ResponseEntity.noContent().build();
     }
+
+    
 }

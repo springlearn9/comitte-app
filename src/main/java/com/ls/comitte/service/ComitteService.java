@@ -5,7 +5,7 @@ import com.ls.comitte.model.response.ComitteResponse;
 import com.ls.comitte.model.entity.Comitte;
 import com.ls.comitte.model.entity.ComitteMemberMap;
 import com.ls.comitte.model.entity.Member;
-import com.ls.comitte.model.response.MemberResponse;
+import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.comitte.repository.MemberRepository;
@@ -66,8 +66,16 @@ public class ComitteService {
     public ComitteResponse assignMembers(Long comitteId, List<Long> memberIds) {
         Comitte comitte = comitteRepository.findById(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
+        
         for (Long mid : memberIds) {
-            ComitteMemberMap comitteMemberMap = ComitteMemberMap.builder().comitteId(comitteId).memberId(mid).shareCount(1).build();
+            Member member = memberRepository.findById(mid)
+                    .orElseThrow(() -> new RuntimeException("Member not found with ID: " + mid));
+            
+            ComitteMemberMap comitteMemberMap = ComitteMemberMap.builder()
+                    .comitte(comitte)
+                    .member(member)
+                    .shareCount(1)
+                    .build();
             comitteMemberMapRepository.save(comitteMemberMap);
         }
         return enrichWithBidsCount(mapper.toResponse(comitte));
@@ -89,8 +97,10 @@ public class ComitteService {
         return enrichListWithBidsCount(responses);
     }
 
-    public List<MemberResponse> getAllAssociatedMembers(Long comitteId) {
-        return comitteMemberMapRepository.findMembersByComitteId(comitteId).stream().map(mapper::toResponse).toList();
+    public List<ComitteMemberMapResponse> getAllAssociatedMembers(Long comitteId) {
+        return comitteMemberMapRepository.findByComitte_ComitteId(comitteId).stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     /**

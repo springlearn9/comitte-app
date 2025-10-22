@@ -8,6 +8,9 @@ public record ComitteMemberMapResponse(
         Long id,
         Long comitteId,
         Long memberId,
+        String comitteName,
+        String memberName,
+        String memberMobile,
         Integer shareCount,
         LocalDateTime createdTimestamp,
         LocalDateTime updatedTimestamp

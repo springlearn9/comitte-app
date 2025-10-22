@@ -10,7 +10,7 @@ import java.util.List;
 public interface ComitteRepository extends JpaRepository<Comitte, Long> {
 
     // find all comittes where a member belongs
-    @Query("SELECT c FROM Comitte c, ComitteMemberMap cmm WHERE c.comitteId = cmm.comitteId AND cmm.memberId = :memberId")
+    @Query("SELECT DISTINCT c FROM Comitte c JOIN ComitteMemberMap cmm ON c = cmm.comitte WHERE cmm.member.memberId = :memberId")
     List<Comitte> findComittesByMemberId(@Param("memberId") Long memberId);
 
     // find all comittes for a owner
