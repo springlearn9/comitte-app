@@ -98,7 +98,7 @@ public class ComitteService {
     }
 
     public List<ComitteMemberMapResponse> getAllAssociatedMembers(Long comitteId) {
-        return comitteMemberMapRepository.findByComitte_ComitteId(comitteId).stream()
+        return comitteMemberMapRepository.findByComitteIdWithDetails(comitteId).stream()
                 .map(mapper::toResponse)
                 .toList();
     }
