@@ -1,6 +1,5 @@
 package com.ls.comitte.service;
 
-import com.ls.comitte.model.BidItem;
 import com.ls.comitte.model.entity.Bid;
 import com.ls.comitte.model.entity.Comitte;
 import com.ls.comitte.model.entity.Member;
@@ -14,9 +13,7 @@ import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -90,20 +87,18 @@ public class BidService {
     public void delete(Long id) {
         bidRepository.deleteById(id);
     }
-
-    @Transactional
-    public BidResponse placeBid(Long id, BidItem bidItem) {
-        Bid bid = bidRepository.findById(id).orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
-        List<BidItem> bidItems = bid.getBidItems();
-        if (CollectionUtils.isEmpty(bidItems)) {
-            bidItems = new ArrayList<>();
-        }
-        bidItems.add(bidItem);
-        bid.setBidItems(bidItems);
-
-        bidRepository.save(bid);
-        return mapper.toResponse(bid);
-
+    
+    /**
+     * Get all bids for committees where the member belongs.
+     * Uses single query with JOIN FETCH for receiversList.
+     * 
+     * @param memberId the ID of the member
+     * @return List of BidResponse with receiversList populated
+     */
+    public List<BidResponse> getBidsForMemberCommittees(Long memberId) {
+        List<Bid> bids = bidRepository.findBidsForMemberCommittees(memberId);
+        return bids.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
-
 }

@@ -39,7 +39,7 @@ public class Member {
     @Column(name = "updated_timestamp")
     private LocalDateTime updatedTimestamp;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role_map",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

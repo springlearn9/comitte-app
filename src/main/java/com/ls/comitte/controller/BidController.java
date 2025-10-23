@@ -1,6 +1,5 @@
 package com.ls.comitte.controller;
 
-import com.ls.comitte.model.BidItem;
 import com.ls.comitte.model.request.BidRequest;
 import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.service.BidService;
@@ -153,36 +152,7 @@ public class BidController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Places a bid on an existing bid item.
-     * 
-     * <p><b>Endpoint:</b> POST /api/bids/{bidId}/place-bid</p>
-     * <p><b>Path Variable:</b> bidId (Long) - The unique identifier of the bid</p>
-     * <p><b>Request Body:</b> BidItem (JSON) - Contains bid amount and member info</p>
-     * <p><b>Response:</b> BidResponse (JSON) with HTTP 200 OK</p>
-     * 
-     * <p><b>Developer Notes:</b>
-     * <ul>
-     *   <li>TODO: Add @Valid annotation to BidItem parameter for input validation</li>
-     *   <li>TODO: Add @PreAuthorize to ensure authenticated users only</li>
-     *   <li>Verify bid is still open and accepting bids</li>
-     *   <li>Implement optimistic locking to handle concurrent bid placements</li>
-     *   <li>Consider rate-limiting to prevent bid manipulation</li>
-     *   <li>Audit all bid placements for compliance and dispute resolution</li>
-     *   <li>Errors are mapped to structured JSON responses via ApiExceptionHandler</li>
-     * </ul>
-     * </p>
-     * 
-     * @param bidId the ID of the bid to place a bid on
-     * @param dto the bid item containing bid details
-     * @return ResponseEntity with updated BidResponse and HTTP 200 status
-     */
-    @PostMapping("/{bidId}/place-bid")
-    public ResponseEntity<BidResponse> placeBid(@PathVariable Long bidId, @RequestBody BidItem dto) {
-        log.info("Placing bid on bid ID: {}", bidId);
-        BidResponse response = bidService.placeBid(bidId, dto);
-        return ResponseEntity.ok(response);
-    }
+
 
     /**
      * Retrieves the bid history for a specific bid.
@@ -237,6 +207,35 @@ public class BidController {
     public ResponseEntity<List<BidResponse>> getBidsByComitteId(@PathVariable Long comitteId) {
         log.info("Fetching bids for comitte ID: {}", comitteId);
         List<BidResponse> bids = bidService.getBidsByComitteId(comitteId);
+        return ResponseEntity.ok(bids);
+    }
+
+    /**
+     * Retrieve all bids for committees where a member belongs.
+     * 
+     * <p>This endpoint fetches all bids from committees where the specified member
+     * is a participant. The response includes complete bid details with receiversList
+     * populated in a single query for optimal performance.</p>
+     * 
+     * <p><b>Performance Note:</b> This endpoint uses JOIN FETCH to eagerly load
+     * related collections, minimizing database roundtrips while retrieving
+     * comprehensive bid information.</p>
+     * 
+     * <p><b>Security Considerations:</b>
+     * <ul>
+     *   <li>Ensure proper authorization - members should only access their own data</li>
+     *   <li>Consider implementing pagination for members with many committee memberships</li>
+     *   <li>Validate memberId to prevent unauthorized data access</li>
+     * </ul>
+     * </p>
+     * 
+     * @param memberId the ID of the member to retrieve committee bids for
+     * @return ResponseEntity with List of BidResponse (including receiversList) and HTTP 200 status
+     */
+    @GetMapping("/member/{memberId}/committee-bids")
+    public ResponseEntity<List<BidResponse>> getBidsForMemberCommittees(@PathVariable Long memberId) {
+        log.info("Fetching bids for all committees where member ID {} belongs", memberId);
+        List<BidResponse> bids = bidService.getBidsForMemberCommittees(memberId);
         return ResponseEntity.ok(bids);
     }
 }

@@ -1,6 +1,5 @@
 package com.ls.comitte.model.entity;
 
-import com.ls.comitte.model.BidItem;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,10 +31,6 @@ public class Bid {
     
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Column(columnDefinition = "jsonb")
-    private List<BidItem> bidItems;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(columnDefinition = "jsonb")

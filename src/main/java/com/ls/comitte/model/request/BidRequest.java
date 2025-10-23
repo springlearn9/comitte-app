@@ -1,6 +1,5 @@
 package com.ls.comitte.model.request;
 
-import com.ls.comitte.model.BidItem;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 
@@ -15,6 +14,5 @@ public class BidRequest {
     private Long finalBidder;
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
-    private List<BidItem> bidItems;
     private List<Long> receiversList;
 }

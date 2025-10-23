@@ -72,9 +72,6 @@ public class ServiceUtil {
         if (bidRequest.getBidDate() != null) {
             bid.setBidDate(bidRequest.getBidDate());
         }
-        if (bidRequest.getBidItems() != null) {
-            bid.setBidItems(bidRequest.getBidItems());
-        }
         if (bidRequest.getReceiversList() != null) {
             bid.setReceiversList(bidRequest.getReceiversList());
         }
