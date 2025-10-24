@@ -36,6 +36,9 @@ public class Bid {
     @Column(columnDefinition = "jsonb")
     private List<Long> receiversList;
 
+    @Transient
+    private Integer monthlyShare;
+
     @CreatedDate
     private LocalDateTime createdTimestamp;
 

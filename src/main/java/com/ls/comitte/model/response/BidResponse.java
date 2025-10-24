@@ -14,6 +14,7 @@ public record BidResponse(
         Long finalBidderId,
         String finalBidderName,
         Integer finalBidAmt,
+        Integer monthlyShare,
         LocalDateTime bidDate,
         List<Long> receiversList,
         LocalDateTime createdTimestamp,

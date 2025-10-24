@@ -30,6 +30,7 @@ public interface ResponseMapper {
     @Mapping(source = "comitte.comitteName", target = "comitteName")
     @Mapping(source = "finalBidder.memberId", target = "finalBidderId")
     @Mapping(source = "finalBidder.name", target = "finalBidderName")
+    @Mapping(target = "monthlyShare", expression = "java(calculateMonthlyShare(bid))")
     BidResponse toResponse(Bid bid);
     
     // Map from relationships directly
@@ -65,4 +66,25 @@ public interface ResponseMapper {
     @Mapping(target = "comitte", ignore = true)
     @Mapping(target = "member", ignore = true)
     ComitteMemberMap toEntity(ComitteMemberMapRequest comitteMemberMapRequest);
+
+    /**
+     * Calculates monthly share for a bid using the formula: (fullAmount - finalBidAmt) / membersCount
+     * @param bid the bid entity containing comitte and finalBidAmt information
+     * @return calculated monthly share amount
+     */
+    default Integer calculateMonthlyShare(Bid bid) {
+        if (bid == null || bid.getComitte() == null || 
+            bid.getFinalBidAmt() == null || 
+            bid.getComitte().getFullAmount() == null || 
+            bid.getComitte().getMembersCount() == null ||
+            bid.getComitte().getMembersCount() == 0) {
+            return null;
+        }
+        
+        Integer fullAmount = bid.getComitte().getFullAmount();
+        Integer finalBidAmt = bid.getFinalBidAmt();
+        Integer membersCount = bid.getComitte().getMembersCount();
+        
+        return (fullAmount - finalBidAmt) / membersCount;
+    }
 }
