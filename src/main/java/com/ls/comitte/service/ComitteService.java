@@ -9,7 +9,6 @@ import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.comitte.repository.MemberRepository;
-import com.ls.comitte.repository.BidRepository;
 import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +26,11 @@ public class ComitteService {
     private final ComitteRepository comitteRepository;
     private final MemberRepository memberRepository;
     private final ComitteMemberMapRepository comitteMemberMapRepository;
-    private final BidRepository bidRepository;
 
     public ComitteResponse get(Long comitteId) {
         Comitte comitte = comitteRepository.findById(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
-        return enrichWithBidsCount(mapper.toResponse(comitte));
+        return mapper.toResponse(comitte);
     }
 
     @Transactional
@@ -45,7 +43,7 @@ public class ComitteService {
         comitte.setOwner(owner);
         
         comitteRepository.save(comitte);
-        return enrichWithBidsCount(mapper.toResponse(comitte));
+        return mapper.toResponse(comitte);
     }
 
     @Transactional
@@ -54,7 +52,7 @@ public class ComitteService {
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         ServiceUtil.update(comitte, comitteRequest);
         comitteRepository.save(comitte);
-        return enrichWithBidsCount(mapper.toResponse(comitte));
+        return mapper.toResponse(comitte);
     }
 
     @Transactional
@@ -78,23 +76,21 @@ public class ComitteService {
                     .build();
             comitteMemberMapRepository.save(comitteMemberMap);
         }
-        return enrichWithBidsCount(mapper.toResponse(comitte));
+        return mapper.toResponse(comitte);
     }
 
     public List<ComitteResponse> getMemberComittes(Long memberId) {
-        List<ComitteResponse> responses = comitteRepository.findComittesByMemberId(memberId)
+        return comitteRepository.findComittesByMemberIdWithBidsCount(memberId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
-        return enrichListWithBidsCount(responses);
     }
 
     public List<ComitteResponse> getOwnerComittes(Long ownerId) {
-        List<ComitteResponse> responses = comitteRepository.findComittesByOwnerId(ownerId)
+        return comitteRepository.findComittesByOwnerIdWithBidsCount(ownerId)
                 .stream()
                 .map(mapper::toResponse)
                 .toList();
-        return enrichListWithBidsCount(responses);
     }
 
     public List<ComitteMemberMapResponse> getAllAssociatedMembers(Long comitteId) {
@@ -103,35 +99,5 @@ public class ComitteService {
                 .toList();
     }
 
-    /**
-     * Helper method to enrich ComitteResponse with bids count
-     */
-    private ComitteResponse enrichWithBidsCount(ComitteResponse response) {
-        Long bidsCount = bidRepository.countByComitte_ComitteId(response.comitteId());
-        return new ComitteResponse(
-            response.comitteId(),
-            response.ownerId(),
-            response.ownerName(),
-            response.comitteName(),
-            response.startDate(),
-            response.fullAmount(),
-            response.membersCount(),
-            response.fullShare(),
-            response.dueDateDays(),
-            response.paymentDateDays(),
-            bidsCount.intValue(),
-            response.createdTimestamp(),
-            response.updatedTimestamp()
-        );
-    }
-
-    /**
-     * Helper method to enrich list of ComitteResponse with bids count
-     */
-    private List<ComitteResponse> enrichListWithBidsCount(List<ComitteResponse> responses) {
-        return responses.stream()
-                .map(this::enrichWithBidsCount)
-                .toList();
-    }
 
 }

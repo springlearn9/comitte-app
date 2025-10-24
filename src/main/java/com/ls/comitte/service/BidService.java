@@ -34,7 +34,7 @@ public class BidService {
     }
 
     public List<BidResponse> getBidsByComitteId(Long comitteId) {
-        return bidRepository.findByComitte_ComitteId(comitteId).stream().map(mapper::toResponse)
+        return bidRepository.findByComitteIdWithDetails(comitteId).stream().map(mapper::toResponse)
                 .toList();
     }
 

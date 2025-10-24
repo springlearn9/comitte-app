@@ -9,11 +9,22 @@ import java.util.List;
 
 public interface ComitteRepository extends JpaRepository<Comitte, Long> {
 
-    // find all comittes where a member belongs
-    @Query("SELECT DISTINCT c FROM Comitte c JOIN ComitteMemberMap cmm ON c = cmm.comitte WHERE cmm.member.memberId = :memberId")
-    List<Comitte> findComittesByMemberId(@Param("memberId") Long memberId);
+    // find all comittes where a member belongs with bids count
+    @Query("SELECT NEW com.ls.comitte.model.entity.Comitte(" +
+           "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
+           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "c.createdTimestamp, c.updatedTimestamp) " +
+           "FROM Comitte c JOIN ComitteMemberMap cmm ON c = cmm.comitte " +
+           "WHERE cmm.member.memberId = :memberId")
+    List<Comitte> findComittesByMemberIdWithBidsCount(@Param("memberId") Long memberId);
 
-    // find all comittes for a owner
-    @Query("SELECT c FROM Comitte c WHERE c.owner.memberId = :ownerId")
-    List<Comitte> findComittesByOwnerId(@Param("ownerId") Long ownerId);
+    // find all comittes for a owner with bids count
+    @Query("SELECT NEW com.ls.comitte.model.entity.Comitte(" +
+           "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
+           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "c.createdTimestamp, c.updatedTimestamp) " +
+           "FROM Comitte c WHERE c.owner.memberId = :ownerId")
+    List<Comitte> findComittesByOwnerIdWithBidsCount(@Param("ownerId") Long ownerId);
 }

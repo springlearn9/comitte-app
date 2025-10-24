@@ -33,7 +33,7 @@ public record ComitteResponse(
                 startDate.format(formatter));
     }
 
-    // Method to display bids count ratio as "bidsCount/membersCount"
+        // Method to display bids count ratio as "bidsCount/membersCount"
     @JsonIgnore
     public String getBidsRatio() {
         return String.format("%d/%d", 

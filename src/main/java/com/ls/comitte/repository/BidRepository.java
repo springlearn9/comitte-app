@@ -8,8 +8,16 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
-    List<Bid> findByComitte_ComitteId(Long comitteId);
-    Long countByComitte_ComitteId(Long comitteId);
+    
+    // Get all bids for a specific committee with all related entities eagerly fetched
+    @Query("SELECT DISTINCT b FROM Bid b " +
+           "LEFT JOIN FETCH b.receiversList " +
+           "LEFT JOIN FETCH b.comitte c " +
+           "LEFT JOIN FETCH c.owner " +
+           "LEFT JOIN FETCH b.finalBidder " +
+           "WHERE b.comitte.comitteId = :comitteId " +
+           "ORDER BY b.bidDate DESC")
+    List<Bid> findByComitteIdWithDetails(@Param("comitteId") Long comitteId);
     
     // Get all bids for committees where a member belongs with essential data only (no roles/authorities)
     @Query("SELECT DISTINCT b FROM Bid b " +
