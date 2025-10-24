@@ -10,7 +10,7 @@ import java.util.List;
 public class BidRequest {
     @NotNull
     private Long comitteId;
-    private Integer comitteNumber;
+    // comitteNumber is auto-calculated based on existing bids for the committee\n    // First bid = 1, second bid = 2, etc. (per committee)
     private Long finalBidder;
     private Integer finalBidAmt;
     private LocalDateTime bidDate;

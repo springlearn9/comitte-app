@@ -47,6 +47,10 @@ public class BidService {
             Comitte comitte = comitteRepository.findById(bidRequest.getComitteId())
                     .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
             bid.setComitte(comitte);
+            
+            // Auto-calculate comitteNumber (starts from 1 for each committee)
+            Integer existingBidsCount = bidRepository.countByComitte_ComitteId(bidRequest.getComitteId());
+            bid.setComitteNumber(existingBidsCount + 1);
         }
         
         // Set final bidder relationship

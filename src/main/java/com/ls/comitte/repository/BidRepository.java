@@ -29,4 +29,7 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
            "WHERE cmm.member.memberId = :memberId " +
            "ORDER BY b.bidDate DESC")
     List<Bid> findBidsForMemberCommittees(@Param("memberId") Long memberId);
+    
+    // Count existing bids for a committee to calculate next comitteNumber
+    Integer countByComitte_ComitteId(Long comitteId);
 }

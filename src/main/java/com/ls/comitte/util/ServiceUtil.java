@@ -62,9 +62,8 @@ public class ServiceUtil {
     public static void update(Bid bid, BidRequest bidRequest) {
         // Note: Committee and final bidder relationships are handled in BidService
         // to ensure proper entity relationships are maintained
-        if (bidRequest.getComitteNumber() != null) {
-            bid.setComitteNumber(bidRequest.getComitteNumber());
-        }
+        // comitteNumber is auto-calculated, not from request
+
         // finalBidder relationship is handled in BidService, not here
         if (bidRequest.getFinalBidAmt() != null) {
             bid.setFinalBidAmt(bidRequest.getFinalBidAmt());
