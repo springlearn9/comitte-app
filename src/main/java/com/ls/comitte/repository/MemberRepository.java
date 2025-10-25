@@ -10,5 +10,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByUsername(String username);
 
     Optional<Member> findByEmail(String email);
-    List<Member> findByNameOrMobileOrUsername(String name, String mobile, String username);
+    
+    /**
+     * Find members whose name or mobile contains the given value (LIKE %value%).
+     * This performs a case-insensitive contains match on name and a contains match on mobile.
+     *
+     * Example usage: repository.findByNameContainingIgnoreCaseOrMobileContaining("john", "9876");
+     */
+    List<Member> findByNameContainingIgnoreCaseOrMobileContaining(String name, String mobile);
 }

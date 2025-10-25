@@ -61,8 +61,8 @@ public class MemberService {
         return mapper.toResponse(member);
     }
 
-    public List<MemberResponse> searchMembers(String name, String mobile, String username) {
-        List<Member> members = memberRepository.findByNameOrMobileOrUsername(name, mobile, username);
+    public List<MemberResponse> searchMembers(String name, String mobile) {
+        List<Member> members = memberRepository.findByNameContainingIgnoreCaseOrMobileContaining(name, mobile);
         return members.stream().map(mapper::toResponse).collect(Collectors.toList());
     }
 }

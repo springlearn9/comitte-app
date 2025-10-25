@@ -190,10 +190,9 @@ public class MemberController {
     @GetMapping("/search")
     public ResponseEntity<List<MemberResponse>> searchMembers(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String mobile,
-            @RequestParam(required = false) String username) {
+            @RequestParam(required = false) String mobile) {
         log.info("Searching members");
-        List<MemberResponse> members = memberService.searchMembers(name, mobile, username);
+        List<MemberResponse> members = memberService.searchMembers(name, mobile);
         return ResponseEntity.ok(members);
     }
 }
