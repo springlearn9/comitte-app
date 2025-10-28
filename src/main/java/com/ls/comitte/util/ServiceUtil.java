@@ -28,6 +28,9 @@ public class ServiceUtil {
         if (memberRequest.getAddress() != null) {
             member.setAddress(memberRequest.getAddress());
         }
+        if (memberRequest.getDob() != null) {
+            member.setDob(memberRequest.getDob());
+        }
         if (memberRequest.getPassword() != null) {
             member.setPassword(memberRequest.getPassword());
         }

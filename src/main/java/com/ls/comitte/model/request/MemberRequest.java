@@ -2,6 +2,7 @@ package com.ls.comitte.model.request;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
 
 @Data
 public class MemberRequest {
@@ -13,5 +14,6 @@ public class MemberRequest {
     private String aadharNo;
     private String password;
     private String address;
+    private LocalDate dob;
 
 }

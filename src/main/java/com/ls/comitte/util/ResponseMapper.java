@@ -45,12 +45,14 @@ public interface ResponseMapper {
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
     @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "memberId", ignore = true)
     Member toEntity(MemberRequest memberRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)
     @Mapping(target = "updatedTimestamp", ignore = true)
     @Mapping(target = "comitteId", ignore = true)
     @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "bidsCount", ignore = true)
     Comitte toEntity(ComitteRequest comitteRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)
@@ -58,6 +60,8 @@ public interface ResponseMapper {
     @Mapping(target = "bidId", ignore = true)
     @Mapping(target = "comitte", ignore = true)
     @Mapping(target = "finalBidder", ignore = true)
+    @Mapping(target = "comitteNumber", ignore = true)
+    @Mapping(target = "monthlyShare", ignore = true)
     Bid toEntity(BidRequest bidRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)

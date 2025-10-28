@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class Member {
     private String name;
     private String aadharNo;
     private String address;
+    private LocalDate dob;
 
     @CreatedDate
     @Column(name = "created_timestamp", updatable = false)

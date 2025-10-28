@@ -2,6 +2,7 @@ package com.ls.comitte.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,6 +14,7 @@ public record MemberResponse(
         String mobile,
         String aadharNo,
         String address,
+        LocalDate dob,
         LocalDateTime createdTimestamp,
         LocalDateTime updatedTimestamp
 ) {}

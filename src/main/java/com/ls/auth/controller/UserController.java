@@ -1,15 +1,7 @@
 package com.ls.auth.controller;
 
-import com.ls.auth.model.entity.Role;
-import com.ls.auth.model.request.RoleAssignDto;
-import com.ls.comitte.model.entity.Member;
-import com.ls.comitte.model.response.MemberResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")

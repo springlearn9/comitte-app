@@ -28,7 +28,7 @@ public class ComitteService {
     private final ComitteMemberMapRepository comitteMemberMapRepository;
 
     public ComitteResponse get(Long comitteId) {
-        Comitte comitte = comitteRepository.findById(comitteId)
+        Comitte comitte = comitteRepository.findByIdWithBidsCount(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         return mapper.toResponse(comitte);
     }
@@ -48,7 +48,7 @@ public class ComitteService {
 
     @Transactional
     public ComitteResponse update(Long comitteId, ComitteRequest comitteRequest) {
-        Comitte comitte = comitteRepository.findById(comitteId)
+        Comitte comitte = comitteRepository.findByIdWithBidsCount(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         ServiceUtil.update(comitte, comitteRequest);
         comitteRepository.save(comitte);
@@ -62,7 +62,7 @@ public class ComitteService {
 
     @Transactional
     public ComitteResponse assignMembers(Long comitteId, List<Long> memberIds) {
-        Comitte comitte = comitteRepository.findById(comitteId)
+        Comitte comitte = comitteRepository.findByIdWithBidsCount(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         
         for (Long mid : memberIds) {

@@ -1,6 +1,5 @@
 package com.ls.comitte.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
@@ -26,8 +25,8 @@ public record ComitteResponse(
     // Method to calculate the custom formatted string
     public String getCalculatedComitteName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMMyy");
-        return String.format("%dL/ %dM/ %d/ %s",
-                fullAmount / 100000,
+        return String.format("%.2fL/ %dM/ %d/ %s",
+                fullAmount / 100000.0,
                 membersCount,
                 fullShare,
                 startDate.format(formatter));

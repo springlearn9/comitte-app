@@ -4,7 +4,6 @@ import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
-import com.ls.comitte.model.response.MemberResponse;
 import com.ls.comitte.service.BidService;
 import com.ls.comitte.service.ComitteService;
 import lombok.RequiredArgsConstructor;
