@@ -1,4 +1,4 @@
-package com.ls.comitte.model.request;
+package com.ls.auth.model.request;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;

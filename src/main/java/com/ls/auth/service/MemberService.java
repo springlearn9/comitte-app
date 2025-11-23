@@ -1,13 +1,13 @@
-package com.ls.comitte.service;
+package com.ls.auth.service;
 
 import com.ls.comitte.util.ServiceUtil;
-import com.ls.comitte.util.ResponseMapper;
-import com.ls.comitte.model.request.MemberRequest;
-import com.ls.comitte.model.response.MemberResponse;
+import com.ls.auth.util.AuthMapper;
+import com.ls.auth.model.request.MemberRequest;
+import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.model.request.RoleAssignDto;
-import com.ls.comitte.model.entity.Member;
+import com.ls.auth.model.entity.Member;
 import com.ls.auth.model.entity.Role;
-import com.ls.comitte.repository.MemberRepository;
+import com.ls.auth.repository.MemberRepository;
 import com.ls.auth.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private final AuthMapper mapper = AuthMapper.INSTANCE;
     private static final String MEMBER_NOT_FOUND = "Member not found";
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;

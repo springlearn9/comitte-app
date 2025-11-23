@@ -1,6 +1,6 @@
-package com.ls.comitte.repository;
+package com.ls.auth.repository;
 
-import com.ls.comitte.model.entity.Member;
+import com.ls.auth.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

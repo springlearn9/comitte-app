@@ -1,4 +1,4 @@
-package com.ls.comitte.model.response;
+package com.ls.auth.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

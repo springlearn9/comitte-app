@@ -1,7 +1,7 @@
 package com.ls.comitte.repository;
 
 import com.ls.comitte.model.entity.ComitteMemberMap;
-import com.ls.comitte.model.entity.Member;
+import com.ls.auth.model.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

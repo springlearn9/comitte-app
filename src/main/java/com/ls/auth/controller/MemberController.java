@@ -1,8 +1,8 @@
-package com.ls.comitte.controller;
+package com.ls.auth.controller;
 
-import com.ls.comitte.model.request.MemberRequest;
-import com.ls.comitte.model.response.MemberResponse;
-import com.ls.comitte.service.MemberService;
+import com.ls.auth.model.request.MemberRequest;
+import com.ls.auth.model.response.MemberResponse;
+import com.ls.auth.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

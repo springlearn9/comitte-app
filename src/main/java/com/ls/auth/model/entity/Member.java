@@ -1,6 +1,5 @@
-package com.ls.comitte.model.entity;
+package com.ls.auth.model.entity;
 
-import com.ls.auth.model.entity.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

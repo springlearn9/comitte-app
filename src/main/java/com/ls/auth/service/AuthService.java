@@ -3,12 +3,12 @@ package com.ls.auth.service;
 import com.ls.auth.model.request.LoginRequest;
 import com.ls.auth.model.request.RegisterRequest;
 import com.ls.auth.model.response.LoginResponse;
-import com.ls.comitte.model.response.MemberResponse;
-import com.ls.comitte.model.entity.Member;
+import com.ls.auth.model.response.MemberResponse;
+import com.ls.auth.model.entity.Member;
 import com.ls.auth.model.entity.Role;
-import com.ls.comitte.repository.MemberRepository;
+import com.ls.auth.repository.MemberRepository;
 import com.ls.auth.repository.RoleRepository;
-import com.ls.comitte.util.ResponseMapper;
+import com.ls.auth.util.AuthMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.transaction.Transactional;
@@ -25,7 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-    private ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private AuthMapper mapper = AuthMapper.INSTANCE;
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
 

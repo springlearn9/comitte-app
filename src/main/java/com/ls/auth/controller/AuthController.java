@@ -3,7 +3,7 @@ package com.ls.auth.controller;
 import com.ls.auth.model.request.LoginRequest;
 import com.ls.auth.model.request.RegisterRequest;
 import com.ls.auth.model.response.LoginResponse;
-import com.ls.comitte.model.response.MemberResponse;
+import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

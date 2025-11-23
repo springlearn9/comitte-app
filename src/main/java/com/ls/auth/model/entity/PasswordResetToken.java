@@ -1,6 +1,6 @@
 package com.ls.auth.model.entity;
 
-import com.ls.comitte.model.entity.Member;
+import com.ls.auth.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
