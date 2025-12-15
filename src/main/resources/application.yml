@@ -23,7 +23,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format_sql: false
 
   mail:
     host: smtp.gmail.com
@@ -68,5 +68,5 @@ springdoc:
 logging:
   level:
     com.ls: DEBUG # Sets the log level to DEBUG for your application's packages
-    org.springframework.web: DEBUG # Sets the log level to INFO for Spring Web classes
+    org.springframework.web: INFO # Sets the log level to INFO for Spring Web classes
     org.hibernate: ERROR # Sets the log level to ERROR for Hibernate (JPA)
