@@ -155,6 +155,36 @@ public class ComitteController {
     }
 
     /**
+     * Retrieves all committees associated with a user (either as owner or member).
+     * 
+     * <p><b>Endpoint:</b> GET /api/comittes/my/{memberId}</p>
+     * <p><b>Path Variable:</b> memberId (Long) - The unique identifier of the user</p>
+     * <p><b>Response:</b> List of ComitteResponse (JSON) with HTTP 200 OK</p>
+     * 
+     * <p><b>Developer Notes:</b>
+     * <ul>
+     *   <li>Returns committees where user is either the owner OR a member</li>
+     *   <li>Uses DISTINCT to avoid duplicate results when user is both owner and member</li>
+     *   <li>TODO: Add @PreAuthorize to ensure users can only view their own committees</li>
+     *   <li>TODO: Implement pagination using @RequestParam (page, size, sort)</li>
+     *   <li>Returns empty list if user has no committee associations</li>
+     *   <li>May return large datasets - pagination strongly recommended</li>
+     *   <li>Consider caching user-committee associations</li>
+     *   <li>Errors are mapped to structured JSON responses via ApiExceptionHandler</li>
+     * </ul>
+     * </p>
+     * 
+     * @param memberId the ID of the user to retrieve committees for
+     * @return ResponseEntity with List of ComitteResponse and HTTP 200 status
+     */
+    @GetMapping("/my/{memberId}")
+    public ResponseEntity<List<ComitteResponse>> findAllMyComittes(@PathVariable Long memberId) {
+        log.info("Fetching all comittes for user ID: {}", memberId);
+        List<ComitteResponse> comittes = comitteService.findAllMyComittes(memberId);
+        return ResponseEntity.ok(comittes);
+    }
+
+    /**
      * Updates an existing committee.
      * 
      * <p><b>Endpoint:</b> PUT /api/comittes/{comitteId}</p>

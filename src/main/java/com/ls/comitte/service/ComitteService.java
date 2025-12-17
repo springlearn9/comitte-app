@@ -99,5 +99,12 @@ public class ComitteService {
                 .toList();
     }
 
+    public List<ComitteResponse> findAllMyComittes(Long memberId) {
+        return comitteRepository.findAllMyComittesWithBidsCount(memberId)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
 
 }

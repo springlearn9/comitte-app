@@ -37,4 +37,14 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
            "c.createdTimestamp, c.updatedTimestamp) " +
            "FROM Comitte c WHERE c.comitteId = :comitteId")
     Optional<Comitte> findByIdWithBidsCount(@Param("comitteId") Long comitteId);
+
+    // find all comittes where user is either owner or member with bids count
+    @Query("SELECT DISTINCT NEW com.ls.comitte.model.entity.Comitte(" +
+           "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
+           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "c.createdTimestamp, c.updatedTimestamp) " +
+           "FROM Comitte c LEFT JOIN ComitteMemberMap cmm ON c = cmm.comitte " +
+           "WHERE c.owner.memberId = :memberId OR cmm.member.memberId = :memberId")
+    List<Comitte> findAllMyComittesWithBidsCount(@Param("memberId") Long memberId);
 }
