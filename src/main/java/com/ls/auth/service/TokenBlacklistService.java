@@ -21,8 +21,8 @@ public class TokenBlacklistService {
     // Map to track last activity time for each token
     private final Map<String, Instant> tokenLastActivity = new ConcurrentHashMap<>();
     
-    // Session timeout in seconds (configurable, default 15 seconds)
-    private static final long SESSION_TIMEOUT_SECONDS = 15;
+    // Session timeout in seconds (configurable, default 30 seconds)
+    private static final long SESSION_TIMEOUT_SECONDS = 30;
     
     /**
      * Add a token to the blacklist (logout)
