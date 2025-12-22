@@ -25,7 +25,8 @@ public record ComitteResponse(
     // Method to calculate the custom formatted string
     public String getCalculatedComitteName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMMyy");
-        return String.format("%.2fL/ %dM/ %s",
+        return String.format("%s - %.2fL / %dM - %s",
+                ownerName,
                 fullAmount / 100000.0,
                 membersCount,
                 startDate.format(formatter));

@@ -19,14 +19,14 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
            "ORDER BY b.bidDate DESC")
     List<Bid> findByComitteIdWithDetails(@Param("comitteId") Long comitteId);
     
-    // Get all bids for committees where a member belongs with essential data only (no roles/authorities)
+    // Get all bids for committees where a member belongs as member or owner with essential data only
     @Query("SELECT DISTINCT b FROM Bid b " +
            "LEFT JOIN FETCH b.receiversList " +
            "LEFT JOIN FETCH b.comitte c " +
            "LEFT JOIN FETCH c.owner " +
            "LEFT JOIN FETCH b.finalBidder " +
-           "JOIN ComitteMemberMap cmm ON b.comitte = cmm.comitte " +
-           "WHERE cmm.member.memberId = :memberId " +
+           "LEFT JOIN ComitteMemberMap cmm ON b.comitte = cmm.comitte " +
+           "WHERE cmm.member.memberId = :memberId OR c.owner.memberId = :memberId " +
            "ORDER BY b.bidDate DESC")
     List<Bid> findBidsForMemberCommittees(@Param("memberId") Long memberId);
     
