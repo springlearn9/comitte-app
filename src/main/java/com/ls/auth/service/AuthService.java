@@ -3,6 +3,7 @@ package com.ls.auth.service;
 import com.ls.auth.model.request.LoginRequest;
 import com.ls.auth.model.request.RegisterRequest;
 import com.ls.auth.model.response.LoginResponse;
+import com.ls.auth.model.response.LogoutResponse;
 import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.model.entity.Member;
 import com.ls.auth.model.entity.Role;
@@ -28,6 +29,7 @@ public class AuthService {
     private AuthMapper mapper = AuthMapper.INSTANCE;
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -78,6 +80,55 @@ public class AuthService {
                 .signWith(SignatureAlgorithm.HS512, decodedSecret).compact(); // CHANGE: Use decoded secret
         MemberResponse memberResponse = mapper.toResponse(user);
         log.info("Login successful for user: {}", user.getUsername()); // CHANGE: Log successful login
+        
+        // Initialize session tracking
+        tokenBlacklistService.updateActivity(token);
+        
         return new LoginResponse(token, "Bearer", jwtExpirationMs, memberResponse);
+    }
+    
+    /**
+     * Logout user by blacklisting their token
+     */
+    public LogoutResponse logout(String token) {
+        log.info("Processing logout request");
+        tokenBlacklistService.blacklistToken(token);
+        return new LogoutResponse("Logged out successfully", System.currentTimeMillis());
+    }
+    
+    /**
+     * Extract username from JWT token
+     */
+    public String extractUsername(String token) {
+        byte[] decodedSecret = Base64.getDecoder().decode(jwtSecret);
+        return Jwts.parser()
+                .setSigningKey(decodedSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+    
+    /**
+     * Validate JWT token
+     */
+    public boolean validateToken(String token, String username) {
+        try {
+            String tokenUsername = extractUsername(token);
+            return tokenUsername.equals(username);
+        } catch (Exception e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Extract roles from member
+     */
+    public List<String> getRolesByUsername(String username) {
+        Member member = memberRepository.findByUsernameWithRoles(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return member.getRoles().stream()
+                .map(role -> "ROLE_" + role.getRoleName())
+                .toList();
     }
 }

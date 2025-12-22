@@ -3,8 +3,11 @@ package com.ls.auth.controller;
 import com.ls.auth.model.request.LoginRequest;
 import com.ls.auth.model.request.RegisterRequest;
 import com.ls.auth.model.response.LoginResponse;
+import com.ls.auth.model.response.LogoutResponse;
 import com.ls.auth.model.response.MemberResponse;
+import com.ls.auth.model.response.SessionStatusResponse;
 import com.ls.auth.service.AuthService;
+import com.ls.auth.service.TokenBlacklistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     /**
      * Register a new user account.
@@ -96,5 +100,87 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse response = authService.login(loginRequest);
         return ResponseEntity.ok(response);
+    }
+    
+    /**
+     * Logout user by invalidating their token.
+     * 
+     * Adds the user's token to a blacklist, effectively logging them out.
+     * The token is extracted from the Authorization header.
+     * 
+     * Request Header: Authorization: Bearer {token}
+     * Response: 200 OK with LogoutResponse containing success message
+     * 
+     * HTTP Status Codes:
+     * - 200 OK: Logout successful
+     * - 400 Bad Request: Missing or invalid Authorization header
+     * - 500 Internal Server Error: Unexpected error during logout
+     * 
+     * Developer notes:
+     * - Token is added to a blacklist and all subsequent requests with this token will be rejected.
+     * - Session tracking is removed upon logout.
+     * - Frontend should clear stored tokens after receiving logout confirmation.
+     * 
+     * @param authHeader the Authorization header containing Bearer token
+     * @return ResponseEntity with HTTP 200 and LogoutResponse
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = extractToken(authHeader);
+        LogoutResponse response = authService.logout(token);
+        return ResponseEntity.ok(response);
+    }
+    
+    /**
+     * Check session status and remaining time.
+     * 
+     * Returns the current session status including whether it's active and 
+     * how many seconds remain before automatic logout due to inactivity.
+     * 
+     * Request Header: Authorization: Bearer {token}
+     * Response: 200 OK with SessionStatusResponse
+     * 
+     * HTTP Status Codes:
+     * - 200 OK: Status retrieved successfully
+     * - 401 Unauthorized: Token expired or blacklisted
+     * - 400 Bad Request: Missing or invalid Authorization header
+     * 
+     * Developer notes:
+     * - This endpoint can be used by frontend to show countdown timers.
+     * - Calling this endpoint also updates the activity timestamp.
+     * - Session timeout is currently set to 15 seconds (configurable).
+     * 
+     * @param authHeader the Authorization header containing Bearer token
+     * @return ResponseEntity with HTTP 200 and SessionStatusResponse
+     */
+    @GetMapping("/session-status")
+    public ResponseEntity<SessionStatusResponse> getSessionStatus(@RequestHeader("Authorization") String authHeader) {
+        String token = extractToken(authHeader);
+        
+        // Check if token is blacklisted
+        if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            return ResponseEntity.ok(new SessionStatusResponse(false, 0, "Session expired or logged out"));
+        }
+        
+        // Check if session expired due to inactivity
+        if (tokenBlacklistService.isSessionExpired(token)) {
+            return ResponseEntity.ok(new SessionStatusResponse(false, 0, "Session expired due to inactivity"));
+        }
+        
+        // Update activity and get remaining time
+        tokenBlacklistService.updateActivity(token);
+        long remainingSeconds = tokenBlacklistService.getRemainingSessionTime(token);
+        
+        return ResponseEntity.ok(new SessionStatusResponse(true, remainingSeconds, "Session active"));
+    }
+    
+    /**
+     * Extract JWT token from Authorization header
+     */
+    private String extractToken(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header");
+        }
+        return authHeader.substring(7);
     }
 }

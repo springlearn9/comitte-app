@@ -1,22 +1,27 @@
 package com.ls.auth.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
-@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -29,22 +34,24 @@ public class SecurityConfig {
                 // 1. Disable CSRF protection, common for stateless REST APIs
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 2. Configure authorization rules
+                // 2. Configure session management as stateless (JWT-based)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // 3. Configure authorization rules
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow access to public endpoints without authentication
-                        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/api-docs/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers("/api/password/**").permitAll()
-                        .requestMatchers("/api/comittes/**", "/api/members/**").permitAll()
-                        .requestMatchers("/api/bids/**", "/api/comitte-member-map/**").permitAll()
                         // Require ADMIN role for admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        // Any other request must be authenticated
+                        // All other requests require authentication (JWT validation)
                         .anyRequest().authenticated()
                 )
 
-                // 3. Configure authentication mechanism (e.g., HTTP Basic)
-                .httpBasic(withDefaults());
+                // 4. Add JWT authentication filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
