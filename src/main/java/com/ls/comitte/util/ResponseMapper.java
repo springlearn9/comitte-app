@@ -23,6 +23,8 @@ public interface ResponseMapper {
 
     @Mapping(source = "comitte.comitteId", target = "comitteId")
     @Mapping(source = "comitte.comitteName", target = "comitteName")
+    @Mapping(source = "comitte.owner.memberId", target = "ownerId")
+    @Mapping(source = "comitte.owner.name", target = "ownerName")
     @Mapping(source = "finalBidder.memberId", target = "finalBidderId")
     @Mapping(source = "finalBidder.name", target = "finalBidderName")
     @Mapping(target = "monthlyShare", expression = "java(calculateMonthlyShare(bid))")

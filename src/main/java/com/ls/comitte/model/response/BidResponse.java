@@ -10,6 +10,8 @@ public record BidResponse(
         Long bidId,
         Long comitteId,
         String comitteName,
+        Long ownerId,
+        String ownerName,
         Integer comitteNumber,
         Long finalBidderId,
         String finalBidderName,
