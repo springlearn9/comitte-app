@@ -4,6 +4,7 @@ import com.ls.auth.model.request.LoginRequest;
 import com.ls.auth.model.request.RegisterRequest;
 import com.ls.auth.model.response.LoginResponse;
 import com.ls.auth.model.response.LogoutResponse;
+import com.ls.auth.model.response.LoginUserDetails;
 import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.model.entity.Member;
 import com.ls.auth.model.entity.Role;
@@ -17,10 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,15 +82,60 @@ public class AuthService {
         String token = Jwts.builder().setSubject(user.getUsername()).setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, decodedSecret).compact(); // CHANGE: Use decoded secret
-        MemberResponse memberResponse = mapper.toResponse(user);
+
         log.info("Login successful for user: {}", user.getUsername()); // CHANGE: Log successful login
-        
+
         // Initialize session tracking
         tokenBlacklistService.updateActivity(token);
-        
-        return new LoginResponse(token, "Bearer", jwtExpirationMs, memberResponse);
+        return new LoginResponse(token, "Bearer", jwtExpirationMs, prepareLoginUserDetails(user));
     }
-    
+
+    public LoginUserDetails prepareLoginUserDetails(Member member) {
+        Set<Long> grantedRoleIds = getRolesIdsSet(member.getRoles());
+        Set<String> grantedRoleNames = getRolesSet(member.getRoles());
+        Set<String> grantedAuthorities = getAuthoritiesSet(member.getRoles());
+        Set<String> rolesAndAuthorities = new HashSet<String>();
+        rolesAndAuthorities.addAll(grantedRoleNames);
+        rolesAndAuthorities.addAll(grantedAuthorities);
+        Map<Long, String> grantedRoleMap = getRoleMap(member.getRoles());
+        return new LoginUserDetails(member.getMemberId(), member.getUsername(), member.getEmail(), member.getName(), member.getMobile(),
+                grantedRoleIds, grantedRoleNames, grantedAuthorities,
+                (Set<GrantedAuthority>) getGrantedAuthorities(rolesAndAuthorities));
+    }
+
+    private final Set<GrantedAuthority> getGrantedAuthorities(Set<String> rolesAndAuthorities) {
+        return rolesAndAuthorities.stream().map(p -> new SimpleGrantedAuthority(p)).collect(Collectors.toSet());
+    }
+
+    /*
+     * Returns Set<String> all roles names assigned to logged in user
+     */
+    private final Set<Long> getRolesIdsSet(final Set<Role> roles) {
+        return roles.stream().map(r -> r.getRoleId()).collect(Collectors.toSet());
+    }
+
+    /*
+     * Returns Set<String> all roles names assigned to logged in user
+     */
+    private final Set<String> getRolesSet(final Set<Role> roles) {
+        return roles.stream().map(r -> "ROLE_" + r.getRoleName()).collect(Collectors.toSet());
+    }
+
+    /*
+     * Returns Set<String> all privileges names mapped with logged in user assigned
+     * roles
+     */
+    private final Set<String> getAuthoritiesSet(final Set<Role> roles) {
+        Set<String> authorities = roles.stream().flatMap(r -> r.getAuthorities().stream().map(p -> p.getAuthorityName()))
+                .collect(Collectors.toSet());
+        return authorities;
+    }
+
+    private final Map<Long, String> getRoleMap(final Set<Role> roles) {
+        Map<Long, String> roleMap = roles.stream().collect(Collectors.toMap(x-> x.getRoleId(), x-> "ROLE_"+x.getRoleName()));
+        return roleMap;
+    }
+
     /**
      * Logout user by blacklisting their token
      */
@@ -95,7 +144,7 @@ public class AuthService {
         tokenBlacklistService.blacklistToken(token);
         return new LogoutResponse("Logged out successfully", System.currentTimeMillis());
     }
-    
+
     /**
      * Extract username from JWT token
      */
@@ -107,7 +156,7 @@ public class AuthService {
                 .getBody()
                 .getSubject();
     }
-    
+
     /**
      * Validate JWT token
      */
@@ -120,7 +169,7 @@ public class AuthService {
             return false;
         }
     }
-    
+
     /**
      * Extract roles from member
      */

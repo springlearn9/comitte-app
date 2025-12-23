@@ -8,6 +8,9 @@ import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.model.response.SessionStatusResponse;
 import com.ls.auth.service.AuthService;
 import com.ls.auth.service.TokenBlacklistService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Authentication management APIs")
 public class AuthController {
     private final AuthService authService;
     private final TokenBlacklistService tokenBlacklistService;
@@ -63,6 +67,7 @@ public class AuthController {
      * @return ResponseEntity with HTTP 201 and MemberResponse containing user profile
      */
     @PostMapping("/register")
+    @Operation(summary = "Register new user", description = "Create a new user account. No authentication required.", security = {})
     public ResponseEntity<MemberResponse> register(@Valid @RequestBody RegisterRequest dto, UriComponentsBuilder uriBuilder) {
         MemberResponse memberResponse = authService.register(dto);
         return new ResponseEntity<>(memberResponse, HttpStatus.CREATED);
@@ -97,6 +102,7 @@ public class AuthController {
      * @return ResponseEntity with HTTP 200 and LoginResponse containing token and user details
      */
     @PostMapping("/login")
+    @Operation(summary = "User login", description = "Authenticate user and get JWT token. No authentication required.", security = {})
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse response = authService.login(loginRequest);
         return ResponseEntity.ok(response);
@@ -125,6 +131,7 @@ public class AuthController {
      * @return ResponseEntity with HTTP 200 and LogoutResponse
      */
     @PostMapping("/logout")
+    @Operation(summary = "User logout", description = "Invalidate the current JWT token. Requires authentication.", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<LogoutResponse> logout(@RequestHeader("Authorization") String authHeader) {
         String token = extractToken(authHeader);
         LogoutResponse response = authService.logout(token);
@@ -154,6 +161,7 @@ public class AuthController {
      * @return ResponseEntity with HTTP 200 and SessionStatusResponse
      */
     @GetMapping("/session-status")
+    @Operation(summary = "Check session status", description = "Checks if the current JWT session is active, expired, or blacklisted. Returns remaining session time in seconds. Requires authentication.")
     public ResponseEntity<SessionStatusResponse> getSessionStatus(@RequestHeader("Authorization") String authHeader) {
         String token = extractToken(authHeader);
         

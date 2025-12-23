@@ -3,6 +3,9 @@ package com.ls.comitte.controller;
 import com.ls.comitte.model.request.BidRequest;
 import com.ls.comitte.model.response.BidResponse;
 import com.ls.comitte.service.BidService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,8 @@ import java.util.List;
 @RequestMapping("/api/bids")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Bids", description = "Bid management APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class BidController {
     private final BidService bidService;
 
@@ -59,6 +64,7 @@ public class BidController {
      * @return ResponseEntity with BidResponse and HTTP 201 status
      */
     @PostMapping
+    @Operation(summary = "Create bid", description = "Creates a new bid for a committee. The request must include bidder details, committee ID, and bid amount. Requires authentication.")
     public ResponseEntity<BidResponse> create(@Valid @RequestBody BidRequest bidRequest) {
         log.info("Creating bid");
         BidResponse response = bidService.create(bidRequest);
@@ -87,6 +93,7 @@ public class BidController {
      * @return ResponseEntity with BidResponse and HTTP 200 status
      */
     @GetMapping("/{bidId}")
+    @Operation(summary = "Get bid by ID", description = "Retrieves detailed information about a bid by its unique identifier. Requires authentication.")
     public ResponseEntity<BidResponse> get(@PathVariable Long bidId) {
         log.info("Fetching bid with ID: {}", bidId);
         BidResponse response = bidService.get(bidId);
@@ -117,6 +124,7 @@ public class BidController {
      * @return ResponseEntity with updated BidResponse and HTTP 200 status
      */
     @PutMapping("/{bidId}")
+    @Operation(summary = "Update bid", description = "Updates an existing bid's information such as bid amount or status. Requires authentication.")
     public ResponseEntity<BidResponse> update(@PathVariable Long bidId, @Valid @RequestBody BidRequest bidRequest) {
         log.info("Updating bid with ID: {}", bidId);
         BidResponse response = bidService.update(bidId, bidRequest);
@@ -145,6 +153,7 @@ public class BidController {
      * @return ResponseEntity with HTTP 204 No Content status
      */
     @DeleteMapping("/{bidId}")
+    @Operation(summary = "Delete bid", description = "Deletes a bid by its ID. This operation cannot be undone. Requires authentication.")
     public ResponseEntity<?> delete(@PathVariable Long bidId) {
         log.info("Deleting bid with ID: {}", bidId);
         bidService.delete(bidId);
@@ -176,6 +185,7 @@ public class BidController {
      * @return ResponseEntity with BidResponse and HTTP 200 status
      */
     @GetMapping("/{bidId}/history")
+    @Operation(summary = "Get bid history", description = "Retrieves the bid history for a specific bid including all placements with timestamps. Requires authentication.")
     public ResponseEntity<BidResponse> history(@PathVariable Long bidId) {
         log.info("Fetching history for bid ID: {}", bidId);
         BidResponse response = bidService.get(bidId);
@@ -204,6 +214,7 @@ public class BidController {
      * @return ResponseEntity with List of BidResponse and HTTP 200 status
      */
     @GetMapping("/comitte/{comitteId}")
+    @Operation(summary = "Get bids by committee ID", description = "Retrieves all bids associated with a specific committee. Returns empty list if no bids found. Requires authentication.")
     public ResponseEntity<List<BidResponse>> getBidsByComitteId(@PathVariable Long comitteId) {
         log.info("Fetching bids for comitte ID: {}", comitteId);
         List<BidResponse> bids = bidService.getBidsByComitteId(comitteId);
@@ -233,6 +244,7 @@ public class BidController {
      * @return ResponseEntity with List of BidResponse (including receiversList) and HTTP 200 status
      */
     @GetMapping("/member/{memberId}/committee-bids")
+    @Operation(summary = "Get bids for member's committees", description = "Retrieves all bids from committees where the specified member is a participant. Uses optimized query with JOIN FETCH. Requires authentication.")
     public ResponseEntity<List<BidResponse>> getBidsForMemberCommittees(@PathVariable Long memberId) {
         log.info("Fetching bids for all committees where member ID {} belongs", memberId);
         List<BidResponse> bids = bidService.getBidsForMemberCommittees(memberId);

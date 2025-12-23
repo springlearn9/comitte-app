@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // 3. Configure authorization rules
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow access to public endpoints without authentication
-                        .requestMatchers("/swagger-ui/**", "/api-docs/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers("/api/password/**").permitAll()
                         // Require ADMIN role for admin endpoints

@@ -3,6 +3,8 @@ package com.ls.auth.controller;
 import com.ls.auth.model.request.PasswordResetRequest;
 import com.ls.auth.model.request.PasswordUpdateRequest;
 import com.ls.auth.service.ForgetPasswordService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/password")
 @RequiredArgsConstructor
+@Tag(name = "Password Reset", description = "Password reset and recovery APIs (Public endpoints)")
 public class PasswordResetController {
 
     private final ForgetPasswordService forgetPasswordService;
@@ -59,6 +62,11 @@ public class PasswordResetController {
      * @return ResponseEntity with HTTP 200 and a generic success message
      */
     @PostMapping("/request-reset")
+    @Operation(
+        summary = "Request password reset", 
+        description = "Initiates password reset by sending a reset token/OTP via email. Always returns success to prevent user enumeration. Does not require authentication.",
+        security = {}
+    )
     public ResponseEntity<String> requestPasswordReset(@RequestBody PasswordResetRequest request) {
         forgetPasswordService.requestPasswordReset(request);
         return ResponseEntity.ok("Password reset email sent.");
@@ -93,6 +101,11 @@ public class PasswordResetController {
      * @return ResponseEntity with HTTP 200 and success message
      */
     @PostMapping("/reset")
+    @Operation(
+        summary = "Reset password", 
+        description = "Completes password reset using the token/OTP and new password. Validates token expiration and invalidates it after successful reset. Does not require authentication.",
+        security = {}
+    )
     public ResponseEntity<String> resetPassword(@RequestBody PasswordUpdateRequest request) {
         forgetPasswordService.resetPassword(request);
         return ResponseEntity.ok("Password reset successful.");

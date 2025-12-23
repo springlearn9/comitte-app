@@ -33,16 +33,16 @@ public class Member {
     private LocalDate dob;
 
     @CreatedDate
-    @Column(name = "created_timestamp", updatable = false)
+    @Column(name = "CREATED_TIMESTAMP", updatable = false)
     private LocalDateTime createdTimestamp;
 
     @LastModifiedDate
-    @Column(name = "updated_timestamp")
+    @Column(name = "UPDATED_TIMESTAMP")
     private LocalDateTime updatedTimestamp;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role_map",
-            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private Set<Role> roles;
 
 }

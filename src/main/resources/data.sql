@@ -1,6 +1,6 @@
 -- drop table bids;
 -- drop table comitte_member_map;
--- drop table user_role_map
+-- drop table users_roles_map
 -- drop table comittes;
 -- drop table members;
 
@@ -37,9 +37,13 @@ INSERT INTO comittes (
 (5, '1.05L 10Jan24 Ajit', '2024-01-10', 105000, 15, 7000, 5, 7, NOW(), NOW()),
 (5, '1.05L 15Jan24 Ajit', '2024-01-15', 105000, 15, 7000, 5, 7, NOW(), NOW()),
 (4, '1.05L 10Dec24 Sundar', '2024-12-10', 105000, 15, 7000, 5, 7, NOW(), NOW()),
-(4, '1.50L 10Jul25 Sundar', '2025-07-10', 150000, 15, 10000, 5, 5, NOW(), NOW()),
+(4, '1.50L 10July25 Sundar', '2025-07-10', 150000, 15, 10000, 5, 5, NOW(), NOW()),
 (6, '2.40L 10Nov24 Sanjay', '2024-11-10', 240000, 15, 16000, 5, 7, NOW(), NOW()),
-(6, '1.50L 10Mar25 Sanjay', '2025-03-10', 150000, 15, 10000, 8, 10, NOW(), NOW());
+(6, '1.50L 10Mar25 Sanjay', '2025-03-10', 150000, 15, 10000, 8, 10, NOW(), NOW()),
+(7, '2.00L 10Mar25 Priya', '2025-03-10', 200000, 7, 28571, 5, 7, NOW(), NOW()),
+(7, '1.50L 10Apr25 Priya', '2025-04-10', 150000, 7, 21429, 5, 7, NOW(), NOW()),
+(8, '2.00L 10July25 Rahul', '2025-07-10', 200000, 8, 25000, 5, 7, NOW(), NOW()),
+(8, '1.50L 20Aug25 Rahul', '2025-08-20', 150000, 8, 18750, 5, 7, NOW(), NOW());
 
 
 
@@ -174,6 +178,24 @@ VALUES
 INSERT INTO roles (role_id, role_name) VALUES (1, 'MEMBER') ON CONFLICT DO NOTHING;
 INSERT INTO roles (role_id, role_name) VALUES (2, 'ADMIN') ON CONFLICT DO NOTHING;
 
+
+INSERT INTO user_role_map (user_id, role_id) VALUES (1,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (2,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (3,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (4,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (5,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (6,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (7,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (8,1) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (1,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (2,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (3,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (4,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (5,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (6,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (7,2) ON CONFLICT DO NOTHING;
+INSERT INTO user_role_map (user_id, role_id) VALUES (8,2) ON CONFLICT DO NOTHING;
+
 INSERT INTO authorities (authority_id, authority_name) VALUES (1, 'MEMBER_CREATE') ON CONFLICT DO NOTHING;
 INSERT INTO authorities (authority_id, authority_name) VALUES (2, 'MEMBER_UPDATE') ON CONFLICT DO NOTHING;
 INSERT INTO authorities (authority_id, authority_name) VALUES (3, 'MEMBER_DELETE') ON CONFLICT DO NOTHING;
@@ -202,7 +224,7 @@ INSERT INTO authorities (authority_id, authority_name) VALUES (34, 'COMITTE_MEMB
 INSERT INTO authorities (authority_id, authority_name) VALUES (35, 'COMITTE_MEMBER_MAP_SEARCH') ON CONFLICT DO NOTHING;
 
 -- map roles to authorities simple
-insert into role_authority_map(role_id, authority_id) values
+insert into roles_authorities_map(role_id, authority_id) values
 (1, 1),
 (1, 2),
 (1, 3),
@@ -226,3 +248,26 @@ insert into role_authority_map(role_id, authority_id) values
 (1, 34),
 (1, 35);
 
+insert into roles_authorities_map(role_id, authority_id) values
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(2, 5),
+(2, 11),
+(2, 12),
+(2, 13),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(2, 21),
+(2, 22),
+(2, 23),
+(2, 24),
+(2, 25),
+(2, 31),
+(2, 32),
+(2, 33),
+(2, 34),
+(2, 35);

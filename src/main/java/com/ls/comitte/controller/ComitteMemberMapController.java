@@ -3,6 +3,9 @@ package com.ls.comitte.controller;
 import com.ls.comitte.model.request.ComitteMemberMapRequest;
 import com.ls.comitte.model.response.ComitteMemberMapResponse;
 import com.ls.comitte.service.ComitteMemberMapService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/comitte-member-map")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Committee Members", description = "Committee member mapping APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class ComitteMemberMapController {
     private final ComitteMemberMapService service;
 
@@ -59,6 +64,7 @@ public class ComitteMemberMapController {
      * @return ResponseEntity with ComitteMemberMapResponse and HTTP 201 status
      */
     @PostMapping
+    @Operation(summary = "Create committee-member mapping", description = "Creates a new association between a committee and a member. Includes share count and other mapping attributes. Requires authentication.")
     public ResponseEntity<ComitteMemberMapResponse> create(@Valid @RequestBody ComitteMemberMapRequest dto) {
         log.info("Creating comitte member map");
         ComitteMemberMapResponse response = service.create(dto);
@@ -86,6 +92,7 @@ public class ComitteMemberMapController {
      * @return ResponseEntity with ComitteMemberMapResponse and HTTP 200 status
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Get committee-member mapping by ID", description = "Retrieves detailed information about a committee-member mapping by its unique identifier. Requires authentication.")
     public ResponseEntity<ComitteMemberMapResponse> get(@PathVariable Long id) {
         log.info("Fetching comitte member map for ID: {}", id);
         ComitteMemberMapResponse response = service.get(id);
@@ -117,6 +124,7 @@ public class ComitteMemberMapController {
      * @return ResponseEntity with updated ComitteMemberMapResponse and HTTP 200 status
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update committee-member mapping", description = "Updates an existing committee-member mapping's attributes such as share count or other relationship data. Requires authentication.")
     public ResponseEntity<ComitteMemberMapResponse> update(@PathVariable Long id, @Valid @RequestBody ComitteMemberMapRequest request) {
         log.info("Updating comitte member map with ID: {}", id);
         ComitteMemberMapResponse response = service.update(id, request);
@@ -145,6 +153,7 @@ public class ComitteMemberMapController {
      * @return ResponseEntity with HTTP 204 No Content status
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete committee-member mapping", description = "Removes a committee-member association by its ID. This operation cannot be undone. Requires authentication.")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         log.info("Deleting comitte member map with ID: {}", id);
         service.delete(id);

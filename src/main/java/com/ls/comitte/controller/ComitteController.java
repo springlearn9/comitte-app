@@ -6,6 +6,9 @@ import com.ls.comitte.model.request.ComitteRequest;
 import com.ls.comitte.model.response.ComitteResponse;
 import com.ls.comitte.service.BidService;
 import com.ls.comitte.service.ComitteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +42,8 @@ import java.util.List;
 @RequestMapping("/api/comittes")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Committees", description = "Committee management APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class ComitteController {
     private final ComitteService comitteService;
     private final BidService bidService;
@@ -64,6 +69,7 @@ public class ComitteController {
      * @return ResponseEntity with ComitteResponse and HTTP 201 status
      */
     @PostMapping
+    @Operation(summary = "Create a new committee", description = "Creates a new committee (comitte) with the specified details including owner, amount, member count, and payment terms. Requires authentication.")
     public ResponseEntity<ComitteResponse> create(@Valid @RequestBody ComitteRequest dto) {
         log.info("Creating comitte");
         ComitteResponse response = comitteService.create(dto);
@@ -92,6 +98,7 @@ public class ComitteController {
      * @return ResponseEntity with ComitteResponse and HTTP 200 status
      */
     @GetMapping("/{comitteId}")
+    @Operation(summary = "Get committee by ID", description = "Retrieves detailed information about a committee by its unique identifier. Requires authentication.")
     public ResponseEntity<ComitteResponse> get(@PathVariable Long comitteId) {
         log.info("Fetching comitte with ID: {}", comitteId);
         ComitteResponse response = comitteService.get(comitteId);
@@ -120,6 +127,7 @@ public class ComitteController {
      * @return ResponseEntity with List of ComitteResponse and HTTP 200 status
      */
     @GetMapping("/member/{memberId}")
+    @Operation(summary = "Get committees by member ID", description = "Retrieves all committees associated with a specific member. Returns empty list if member has no committee associations. Requires authentication.")
     public ResponseEntity<List<ComitteResponse>> getMemberComittes(@PathVariable Long memberId) {
         log.info("Fetching comittes for member ID: {}", memberId);
         List<ComitteResponse> comittes = comitteService.getMemberComittes(memberId);
@@ -148,6 +156,7 @@ public class ComitteController {
      * @return ResponseEntity with List of ComitteResponse and HTTP 200 status
      */
     @GetMapping("/owner/{ownerId}")
+    @Operation(summary = "Get committees by owner ID", description = "Retrieves all committees owned by a specific owner. Returns empty list if owner has no committees. Requires authentication.")
     public ResponseEntity<List<ComitteResponse>> getOwnerComittes(@PathVariable Long ownerId) {
         log.info("Fetching comittes for owner ID: {}", ownerId);
         List<ComitteResponse> comittes = comitteService.getOwnerComittes(ownerId);
@@ -178,6 +187,7 @@ public class ComitteController {
      * @return ResponseEntity with List of ComitteResponse and HTTP 200 status
      */
     @GetMapping("/my/{memberId}")
+    @Operation(summary = "Get all user's committees", description = "Retrieves all committees where the user is either the owner OR a member. Uses DISTINCT to avoid duplicate results. Requires authentication.")
     public ResponseEntity<List<ComitteResponse>> findAllMyComittes(@PathVariable Long memberId) {
         log.info("Fetching all comittes for user ID: {}", memberId);
         List<ComitteResponse> comittes = comitteService.findAllMyComittes(memberId);
@@ -208,6 +218,7 @@ public class ComitteController {
      * @return ResponseEntity with updated ComitteResponse and HTTP 200 status
      */
     @PutMapping("/{comitteId}")
+    @Operation(summary = "Update committee", description = "Updates an existing committee's information such as name, amounts, payment terms, etc. Requires authentication.")
     public ResponseEntity<ComitteResponse> update(@PathVariable Long comitteId, @Valid @RequestBody ComitteRequest dto) {
         log.info("Updating comitte with ID: {}", comitteId);
         ComitteResponse response = comitteService.update(comitteId, dto);
@@ -237,6 +248,7 @@ public class ComitteController {
      * @return ResponseEntity with HTTP 204 No Content status
      */
     @DeleteMapping("/{comitteId}")
+    @Operation(summary = "Delete committee", description = "Deletes a committee by its ID. This may cascade to related data. Requires authentication.")
     public ResponseEntity<?> delete(@PathVariable Long comitteId) {
         log.info("Deleting comitte with ID: {}", comitteId);
         comitteService.delete(comitteId);
@@ -269,6 +281,7 @@ public class ComitteController {
      * @return ResponseEntity with updated ComitteResponse and HTTP 200 status
      */
     @PostMapping("/{comitteId}/assign-members")
+    @Operation(summary = "Assign members to committee", description = "Assigns multiple members to a committee by their IDs. Returns the updated committee information. Requires authentication.")
     public ResponseEntity<ComitteResponse> assign(@PathVariable Long comitteId, @RequestBody List<Long> memberIds) {
         log.info("Assigning members to comitte ID: {}", comitteId);
         ComitteResponse response = comitteService.assignMembers(comitteId, memberIds);
@@ -297,6 +310,7 @@ public class ComitteController {
      * @return ResponseEntity with List of BidResponse and HTTP 200 status
      */
     @GetMapping("/{comitteId}/bids")
+    @Operation(summary = "Get bids by committee ID", description = "Retrieves all bids associated with a specific committee. Returns empty list if no bids found. Requires authentication.")
     public ResponseEntity<List<BidResponse>> getBidsByComitteId(@PathVariable Long comitteId) {
         log.info("Fetching bids for comitte ID: {}", comitteId);
         List<BidResponse> bids = bidService.getBidsByComitteId(comitteId);
@@ -326,6 +340,7 @@ public class ComitteController {
      * @return ResponseEntity with List of ComitteMemberMapResponse and HTTP 200 status
      */
     @GetMapping("/{comitteId}/members")
+    @Operation(summary = "Get members by committee ID", description = "Retrieves all members associated with a specific committee including their share information. Returns empty list if no members assigned. Requires authentication.")
     public ResponseEntity<List<ComitteMemberMapResponse>> getAllAssociatedMembers(@PathVariable Long comitteId) {
         log.info("Fetching ComitteMemberMapResponse for comitte ID: {}", comitteId);
         List<ComitteMemberMapResponse> members = comitteService.getAllAssociatedMembers(comitteId);

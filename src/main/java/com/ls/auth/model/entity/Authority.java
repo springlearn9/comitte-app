@@ -12,7 +12,12 @@ import lombok.*;
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "AUTHORITY_ID")
     private Long authorityId;
-    @Column(nullable = false, unique = true)
+
+    @Column(name = "AUTHORITY_NAME", unique = true, nullable = false, length = 200)
     private String authorityName;
+
+    @Column(name = "DETAILS", length = 500)
+    private String details;
 }

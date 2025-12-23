@@ -3,6 +3,9 @@ package com.ls.auth.controller;
 import com.ls.auth.model.request.MemberRequest;
 import com.ls.auth.model.response.MemberResponse;
 import com.ls.auth.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,8 @@ import java.util.List;
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Members", description = "Member management APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class MemberController {
     private final MemberService memberService;
 
@@ -60,6 +65,7 @@ public class MemberController {
      * @return ResponseEntity with MemberResponse and HTTP 201 status
      */
     @PostMapping
+    @Operation(summary = "Create a new member", description = "Creates a new member with the provided details. Requires authentication.")
     public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberRequest dto) {
         log.info("Creating member");
         MemberResponse response = memberService.create(dto);
@@ -88,6 +94,7 @@ public class MemberController {
      * @return ResponseEntity with MemberResponse and HTTP 200 status
      */
     @GetMapping("/{memberId}")
+    @Operation(summary = "Get member by ID", description = "Retrieves a member's details by their unique identifier. Requires authentication.")
     public ResponseEntity<MemberResponse> get(@PathVariable Long memberId) {
         log.info("Fetching member with ID: {}", memberId);
         MemberResponse response = memberService.get(memberId);
@@ -119,6 +126,7 @@ public class MemberController {
      * @return ResponseEntity with updated MemberResponse and HTTP 200 status
      */
     @PutMapping("/{memberId}")
+    @Operation(summary = "Update member", description = "Updates an existing member's information. Requires authentication.")
     public ResponseEntity<MemberResponse> update(@PathVariable Long memberId, @Valid @RequestBody MemberRequest dto) {
         log.info("Updating member with ID: {}", memberId);
         MemberResponse response = memberService.update(memberId, dto);
@@ -148,6 +156,7 @@ public class MemberController {
      * @return ResponseEntity with HTTP 204 No Content status
      */
     @DeleteMapping("/{memberId}")
+    @Operation(summary = "Delete member", description = "Deletes a member by their ID. Requires authentication.")
     public ResponseEntity<?> delete(@PathVariable Long memberId) {
         log.info("Deleting member with ID: {}", memberId);
         memberService.delete(memberId);
@@ -184,10 +193,10 @@ public class MemberController {
      * 
      * @param name optional name search parameter
      * @param mobile optional mobile search parameter
-     * @param username optional username search parameter
      * @return ResponseEntity with List of MemberResponse and HTTP 200 status
      */
     @GetMapping("/search")
+    @Operation(summary = "Search members", description = "Search for members by name or mobile number. Returns a list of matching members. Requires authentication.")
     public ResponseEntity<List<MemberResponse>> searchMembers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String mobile) {

@@ -21,13 +21,13 @@ public class Bid {
     private Long bidId;
     
     @ManyToOne
-    @JoinColumn(name = "comitteId", referencedColumnName = "comitteId")
+    @JoinColumn(name = "COMITTE_ID", referencedColumnName = "comitteId")
     private Comitte comitte;
     
     private Integer comitteNumber;
     
     @ManyToOne
-    @JoinColumn(name = "finalBidder", referencedColumnName = "memberId")
+    @JoinColumn(name = "FINAL_BIDDER", referencedColumnName = "memberId")
     private Member finalBidder;
     
     private Integer finalBidAmt;

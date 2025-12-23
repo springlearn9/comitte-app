@@ -14,12 +14,17 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ROLE_ID")
     private Long roleId;
-    @Column(nullable = false, unique = true)
+
+    @Column(name = "ROLE_NAME", nullable = false, unique = true, length = 200)
     private String roleName;
 
+    @Column(name = "DETAILS", length = 500)
+    private String details;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_authority_map",
-            joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    @JoinTable(name = "roles_authorities_map",
+            joinColumns = @JoinColumn(name = "ROLE_ID"), inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID"))
     private Set<Authority> authorities;
 }

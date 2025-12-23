@@ -20,11 +20,11 @@ public class ComitteMemberMap {
     private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comitte_id", referencedColumnName = "comitteId")
+    @JoinColumn(name = "COMITTE_ID", referencedColumnName = "comitteId")
     private Comitte comitte;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", referencedColumnName = "memberId")
+    @JoinColumn(name = "MEMBER_ID", referencedColumnName = "memberId")
     private Member member;
     
     private Integer shareCount;

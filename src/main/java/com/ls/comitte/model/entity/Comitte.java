@@ -19,7 +19,7 @@ public class Comitte {
     private Long comitteId;
 
     @ManyToOne
-    @JoinColumn(name = "ownerId", referencedColumnName = "memberId", nullable = false)
+    @JoinColumn(name = "OWNER_ID", referencedColumnName = "memberId", nullable = false)
     private Member owner;
 
     private String comitteName;
