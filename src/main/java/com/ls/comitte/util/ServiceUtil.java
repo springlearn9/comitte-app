@@ -48,8 +48,8 @@ public class ServiceUtil {
         if (comitteRequest.getFullAmount() != null) {
             comitte.setFullAmount(comitteRequest.getFullAmount());
         }
-        if (comitteRequest.getMembersCount() != null) {
-            comitte.setMembersCount(comitteRequest.getMembersCount());
+        if (comitteRequest.getTotalShares() != null) {
+            comitte.setTotalShares(comitteRequest.getTotalShares());
         }
         if (comitteRequest.getFullShare() != null) {
             comitte.setFullShare(comitteRequest.getFullShare());

@@ -14,11 +14,13 @@ public record ComitteResponse(
         String comitteName,
         LocalDate startDate,
         Integer fullAmount,
-        Integer membersCount,
+        Integer totalShares,
         Integer fullShare,
         Integer dueDateDays,
         Integer paymentDateDays,
         Integer bidsCount,
+        Integer associatedSharesCount,
+        Integer associatedMembersCount,
         LocalDateTime createdTimestamp,
         LocalDateTime updatedTimestamp
 ) {
@@ -28,7 +30,7 @@ public record ComitteResponse(
         return String.format("%s - %.2fL / %dM - %s",
                 ownerName,
                 fullAmount / 100000.0,
-                membersCount,
+                totalShares,
                 startDate.format(formatter));
     }
 
@@ -36,7 +38,7 @@ public record ComitteResponse(
     public String getBidsRatio() {
         return String.format("%d/%d", 
                 bidsCount != null ? bidsCount : 0, 
-                membersCount != null ? membersCount : 0);
+                totalShares != null ? totalShares : 0);
     }
 
 }

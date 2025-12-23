@@ -15,7 +15,7 @@ public class ComitteRequest {
     private String comitteName;
     private LocalDate startDate;
     private Integer fullAmount;
-    private Integer membersCount;
+    private Integer totalShares;
     private Integer fullShare;
     private Integer dueDateDays;
     private Integer paymentDateDays;

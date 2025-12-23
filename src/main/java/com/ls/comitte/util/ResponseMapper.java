@@ -43,6 +43,8 @@ public interface ResponseMapper {
     @Mapping(target = "comitteId", ignore = true)
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "bidsCount", ignore = true)
+    @Mapping(target = "associatedSharesCount", ignore = true)
+    @Mapping(target = "associatedMembersCount", ignore = true)
     Comitte toEntity(ComitteRequest comitteRequest);
 
     @Mapping(target = "createdTimestamp", ignore = true)
@@ -62,7 +64,7 @@ public interface ResponseMapper {
     ComitteMemberMap toEntity(ComitteMemberMapRequest comitteMemberMapRequest);
 
     /**
-     * Calculates monthly share for a bid using the formula: (fullAmount - finalBidAmt) / membersCount
+     * Calculates monthly share for a bid using the formula: (fullAmount - finalBidAmt) / totalShares
      * @param bid the bid entity containing comitte and finalBidAmt information
      * @return calculated monthly share amount
      */
@@ -70,15 +72,15 @@ public interface ResponseMapper {
         if (bid == null || bid.getComitte() == null || 
             bid.getFinalBidAmt() == null || 
             bid.getComitte().getFullAmount() == null || 
-            bid.getComitte().getMembersCount() == null ||
-            bid.getComitte().getMembersCount() == 0) {
+            bid.getComitte().getTotalShares() == null ||
+            bid.getComitte().getTotalShares() == 0) {
             return null;
         }
         
         Integer fullAmount = bid.getComitte().getFullAmount();
         Integer finalBidAmt = bid.getFinalBidAmt();
-        Integer membersCount = bid.getComitte().getMembersCount();
+        Integer totalShares = bid.getComitte().getTotalShares();
         
-        return (fullAmount - finalBidAmt) / membersCount;
+        return (fullAmount - finalBidAmt) / totalShares;
     }
 }

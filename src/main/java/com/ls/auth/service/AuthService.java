@@ -67,8 +67,8 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         log.info("Attempting login for user: {}", loginRequest.getUsernameOrEmail()); // CHANGE: Log login attempt
-        Optional<Member> ou = memberRepository.findByUsername(loginRequest.getUsernameOrEmail());
-        if (ou.isEmpty()) ou = memberRepository.findByEmail(loginRequest.getUsernameOrEmail());
+        Optional<Member> ou = memberRepository.findByUsernameWithRoles(loginRequest.getUsernameOrEmail());
+        if (ou.isEmpty()) ou = memberRepository.findByEmailWithRoles(loginRequest.getUsernameOrEmail());
         Member user = ou.orElseThrow(() -> {
             log.error("Invalid credentials for user: {}", loginRequest.getUsernameOrEmail()); // CHANGE: Log invalid credentials
             return new RuntimeException("invalid credentials");

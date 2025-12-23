@@ -29,7 +29,7 @@ INSERT INTO members (
 
 
 INSERT INTO comittes (
-		owner_id, comitte_name, start_date, full_amount, members_count, full_share, 
+		owner_id, comitte_name, start_date, full_amount, total_shares, full_share,
 		due_date_days, payment_date_days, created_timestamp, updated_timestamp
 ) VALUES
 (1, '2.0L 15Jan24 Bippan', '2024-01-15', 200000, 16, 12500, 5, 7, NOW(), NOW()),

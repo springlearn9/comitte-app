@@ -14,10 +14,24 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
     
     /**
-     * Find member by username with roles eagerly fetched
+     * Find member by username with roles and authorities eagerly fetched
+     * This prevents N+1 query issues during authentication
      */
-    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.roles WHERE m.username = :username")
+    @Query("SELECT DISTINCT m FROM Member m " +
+           "LEFT JOIN FETCH m.roles r " +
+           "LEFT JOIN FETCH r.authorities " +
+           "WHERE m.username = :username")
     Optional<Member> findByUsernameWithRoles(@Param("username") String username);
+    
+    /**
+     * Find member by email with roles and authorities eagerly fetched
+     * This prevents N+1 query issues during authentication
+     */
+    @Query("SELECT DISTINCT m FROM Member m " +
+           "LEFT JOIN FETCH m.roles r " +
+           "LEFT JOIN FETCH r.authorities " +
+           "WHERE m.email = :email")
+    Optional<Member> findByEmailWithRoles(@Param("email") String email);
     
     /**
      * Find members whose name or mobile contains the given value (LIKE %value%).

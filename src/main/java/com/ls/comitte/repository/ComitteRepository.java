@@ -13,8 +13,10 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
     // find all comittes where a member belongs with bids count
     @Query("SELECT NEW com.ls.comitte.model.entity.Comitte(" +
            "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
-           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "c.totalShares, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
            "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "CAST((SELECT COALESCE(SUM(cmm2.shareCount), 0) FROM ComitteMemberMap cmm2 WHERE cmm2.comitte = c) AS int), " +
+           "CAST((SELECT COUNT(DISTINCT cmm2.member) FROM ComitteMemberMap cmm2 WHERE cmm2.comitte = c) AS int), " +
            "c.createdTimestamp, c.updatedTimestamp) " +
            "FROM Comitte c JOIN ComitteMemberMap cmm ON c = cmm.comitte " +
            "WHERE cmm.member.memberId = :memberId")
@@ -23,8 +25,10 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
     // find all comittes for a owner with bids count
     @Query("SELECT NEW com.ls.comitte.model.entity.Comitte(" +
            "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
-           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "c.totalShares, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
            "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "CAST((SELECT COALESCE(SUM(cmm.shareCount), 0) FROM ComitteMemberMap cmm WHERE cmm.comitte = c) AS int), " +
+           "CAST((SELECT COUNT(DISTINCT cmm.member) FROM ComitteMemberMap cmm WHERE cmm.comitte = c) AS int), " +
            "c.createdTimestamp, c.updatedTimestamp) " +
            "FROM Comitte c WHERE c.owner.memberId = :ownerId")
     List<Comitte> findComittesByOwnerIdWithBidsCount(@Param("ownerId") Long ownerId);
@@ -32,8 +36,10 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
     // find single comitte by ID with bids count
     @Query("SELECT NEW com.ls.comitte.model.entity.Comitte(" +
            "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
-           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "c.totalShares, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
            "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "CAST((SELECT COALESCE(SUM(cmm.shareCount), 0) FROM ComitteMemberMap cmm WHERE cmm.comitte = c) AS int), " +
+           "CAST((SELECT COUNT(DISTINCT cmm.member) FROM ComitteMemberMap cmm WHERE cmm.comitte = c) AS int), " +
            "c.createdTimestamp, c.updatedTimestamp) " +
            "FROM Comitte c WHERE c.comitteId = :comitteId")
     Optional<Comitte> findByIdWithBidsCount(@Param("comitteId") Long comitteId);
@@ -41,8 +47,10 @@ public interface ComitteRepository extends JpaRepository<Comitte, Long> {
     // find all comittes where user is either owner or member with bids count
     @Query("SELECT DISTINCT NEW com.ls.comitte.model.entity.Comitte(" +
            "c.comitteId, c.owner, c.comitteName, c.startDate, c.fullAmount, " +
-           "c.membersCount, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
+           "c.totalShares, c.fullShare, c.dueDateDays, c.paymentDateDays, " +
            "CAST((SELECT COUNT(b) FROM Bid b WHERE b.comitte = c) AS int), " +
+           "CAST((SELECT COALESCE(SUM(cmm2.shareCount), 0) FROM ComitteMemberMap cmm2 WHERE cmm2.comitte = c) AS int), " +
+           "CAST((SELECT COUNT(DISTINCT cmm2.member) FROM ComitteMemberMap cmm2 WHERE cmm2.comitte = c) AS int), " +
            "c.createdTimestamp, c.updatedTimestamp) " +
            "FROM Comitte c LEFT JOIN ComitteMemberMap cmm ON c = cmm.comitte " +
            "WHERE c.owner.memberId = :memberId OR cmm.member.memberId = :memberId")
