@@ -175,8 +175,8 @@ VALUES
 
 
 -- seed roles/authorities
-INSERT INTO roles (role_id, role_name) VALUES (1, 'MEMBER') ON CONFLICT DO NOTHING;
-INSERT INTO roles (role_id, role_name) VALUES (2, 'ADMIN') ON CONFLICT DO NOTHING;
+INSERT INTO roles (role_id, role_name) VALUES (1, 'COMITTE_MEMBER') ON CONFLICT DO NOTHING;
+INSERT INTO roles (role_id, role_name) VALUES (2, 'COMITTE_OWNER') ON CONFLICT DO NOTHING;
 
 
 INSERT INTO user_role_map (user_id, role_id) VALUES (1,1) ON CONFLICT DO NOTHING;
