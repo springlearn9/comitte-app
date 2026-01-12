@@ -1,16 +1,17 @@
 package com.ls.comitte.model.entity;
 
 import com.ls.auth.model.entity.Member;
+import com.ls.common.model.AuditMetadata;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "bids")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,16 +34,9 @@ public class Bid {
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Column(columnDefinition = "jsonb")
-    private List<Long> receiversList;
-
     @Transient
     private Integer monthlyShare;
 
-    @CreatedDate
-    private LocalDateTime createdTimestamp;
-
-    @LastModifiedDate
-    private LocalDateTime updatedTimestamp;
+    @Embedded
+    private AuditMetadata audit;
 }

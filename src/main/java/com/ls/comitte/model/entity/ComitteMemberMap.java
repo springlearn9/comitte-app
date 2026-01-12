@@ -1,15 +1,14 @@
 package com.ls.comitte.model.entity;
 
 import com.ls.auth.model.entity.Member;
+import com.ls.common.model.AuditMetadata;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "comitte_member_map")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,9 +28,6 @@ public class ComitteMemberMap {
     
     private Integer shareCount;
     
-    @CreatedDate
-    private LocalDateTime createdTimestamp;
-    
-    @LastModifiedDate
-    private LocalDateTime updatedTimestamp;
+    @Embedded
+    private AuditMetadata audit;
 }

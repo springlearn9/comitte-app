@@ -11,11 +11,14 @@ import com.ls.auth.repository.MemberRepository;
 import com.ls.comitte.util.ServiceUtil;
 import com.ls.comitte.util.ResponseMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BidService {
@@ -42,6 +45,21 @@ public class BidService {
     public BidResponse create(BidRequest bidRequest) {
         Bid bid = mapper.toEntity(bidRequest);
         
+        // Initialize audit metadata object (required for JPA auditing to populate fields)
+        if (bid.getAudit() == null) {
+            bid.setAudit(new com.ls.common.model.AuditMetadata());
+        }
+        
+        // Check authentication context
+        org.springframework.security.core.Authentication auth = 
+            org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        log.info("Creating bid - Authentication: {}, Principal: {}, Authenticated: {}", 
+                auth != null ? auth.getClass().getSimpleName() : "null",
+                auth != null ? auth.getPrincipal() : "null",
+                auth != null ? auth.isAuthenticated() : "false");
+        
+        log.info("Creating new bid - audit before save: {}", bid.getAudit());
+        
         // Set committee relationship
         if (bidRequest.getComitteId() != null) {
             Comitte comitte = comitteRepository.findById(bidRequest.getComitteId())
@@ -60,14 +78,21 @@ public class BidService {
             bid.setFinalBidder(finalBidder);
         }
         
-        bidRepository.save(bid);
-        return mapper.toResponse(bid);
+        Bid savedBid = bidRepository.save(bid);
+        log.info("Bid saved - audit after save: {}", savedBid.getAudit());
+        return mapper.toResponse(savedBid);
     }
 
     @Transactional
     public BidResponse update(Long bidId, BidRequest bidRequest) {
         Bid bid = bidRepository.findById(bidId).orElseThrow(() -> new RuntimeException(BID_NOT_FOUND));
+        
         ServiceUtil.update(bid, bidRequest);
+        
+        // Initialize audit metadata if null (shouldn't happen on update, but safe check)
+        if (bid.getAudit() == null) {
+            bid.setAudit(new com.ls.common.model.AuditMetadata());
+        }
         
         // Update committee relationship if provided
         if (bidRequest.getComitteId() != null) {

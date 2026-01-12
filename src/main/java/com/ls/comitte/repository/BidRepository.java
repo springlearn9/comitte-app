@@ -11,7 +11,6 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
     
     // Get all bids for a specific committee with all related entities eagerly fetched
     @Query("SELECT DISTINCT b FROM Bid b " +
-           "LEFT JOIN FETCH b.receiversList " +
            "LEFT JOIN FETCH b.comitte c " +
            "LEFT JOIN FETCH c.owner " +
            "LEFT JOIN FETCH b.finalBidder " +
@@ -21,7 +20,6 @@ public interface BidRepository extends JpaRepository<Bid, Long> {
     
     // Get all bids for committees where a member belongs as member or owner with essential data only
     @Query("SELECT DISTINCT b FROM Bid b " +
-           "LEFT JOIN FETCH b.receiversList " +
            "LEFT JOIN FETCH b.comitte c " +
            "LEFT JOIN FETCH c.owner " +
            "LEFT JOIN FETCH b.finalBidder " +

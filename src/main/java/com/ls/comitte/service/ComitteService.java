@@ -37,6 +37,11 @@ public class ComitteService {
     public ComitteResponse create(ComitteRequest comitteRequest) {
         Comitte comitte = mapper.toEntity(comitteRequest);
         
+        // Initialize audit metadata object (required for JPA auditing to populate fields)
+        if (comitte.getAudit() == null) {
+            comitte.setAudit(new com.ls.common.model.AuditMetadata());
+        }
+        
         // Set the owner from ownerId
         Member owner = memberRepository.findById(comitteRequest.getOwnerId())
                 .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + comitteRequest.getOwnerId()));
@@ -51,6 +56,12 @@ public class ComitteService {
         Comitte comitte = comitteRepository.findByIdWithBidsCount(comitteId)
                 .orElseThrow(() -> new RuntimeException(COMITTE_NOT_FOUND));
         ServiceUtil.update(comitte, comitteRequest);
+        
+        // Initialize audit metadata if null (shouldn't happen on update, but safe check)
+        if (comitte.getAudit() == null) {
+            comitte.setAudit(new com.ls.common.model.AuditMetadata());
+        }
+        
         comitteRepository.save(comitte);
         return mapper.toResponse(comitte);
     }
@@ -73,6 +84,7 @@ public class ComitteService {
                     .comitte(comitte)
                     .member(member)
                     .shareCount(1)
+                    .audit(new com.ls.common.model.AuditMetadata())
                     .build();
             comitteMemberMapRepository.save(comitteMemberMap);
         }

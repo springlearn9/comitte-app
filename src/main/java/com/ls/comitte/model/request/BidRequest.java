@@ -14,5 +14,4 @@ public class BidRequest {
     private Long finalBidder;
     private Integer finalBidAmt;
     private LocalDateTime bidDate;
-    private List<Long> receiversList;
 }

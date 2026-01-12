@@ -26,6 +26,11 @@ public class ComitteMemberMapService {
     public ComitteMemberMapResponse create(ComitteMemberMapRequest comitteMemberMapRequest) {
         ComitteMemberMap comitteMemberMap = mapper.toEntity(comitteMemberMapRequest);
         
+        // Initialize audit metadata object (required for JPA auditing to populate fields)
+        if (comitteMemberMap.getAudit() == null) {
+            comitteMemberMap.setAudit(new com.ls.common.model.AuditMetadata());
+        }
+        
         // Set the relationships from the request IDs
         Comitte comitte = comitteRepository.findById(comitteMemberMapRequest.getComitteId())
                 .orElseThrow(() -> new RuntimeException("Comitte not found with ID: " + comitteMemberMapRequest.getComitteId()));
@@ -44,6 +49,11 @@ public class ComitteMemberMapService {
     public ComitteMemberMapResponse update(Long id, ComitteMemberMapRequest comitteMemberMapRequest) {
         ComitteMemberMap comitteMemberMap = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException(COMITTE_MEMBER_MAPPING_NOT_FOUND));
+        
+        // Initialize audit metadata if null (shouldn't happen on update, but safe check)
+        if (comitteMemberMap.getAudit() == null) {
+            comitteMemberMap.setAudit(new com.ls.common.model.AuditMetadata());
+        }
         
         // Update relationships if they changed
         if (!comitteMemberMap.getComitte().getComitteId().equals(comitteMemberMapRequest.getComitteId())) {

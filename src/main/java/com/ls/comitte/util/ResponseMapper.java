@@ -38,8 +38,7 @@ public interface ResponseMapper {
     @Mapping(source = "member.mobile", target = "memberMobile")
     ComitteMemberMapResponse toResponse(ComitteMemberMap comitteMemberMap);
 
-    @Mapping(target = "createdTimestamp", ignore = true)
-    @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "audit", ignore = true)
     @Mapping(target = "comitteId", ignore = true)
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "bidsCount", ignore = true)
@@ -47,8 +46,7 @@ public interface ResponseMapper {
     @Mapping(target = "associatedMembersCount", ignore = true)
     Comitte toEntity(ComitteRequest comitteRequest);
 
-    @Mapping(target = "createdTimestamp", ignore = true)
-    @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "audit", ignore = true)
     @Mapping(target = "bidId", ignore = true)
     @Mapping(target = "comitte", ignore = true)
     @Mapping(target = "finalBidder", ignore = true)
@@ -56,8 +54,7 @@ public interface ResponseMapper {
     @Mapping(target = "monthlyShare", ignore = true)
     Bid toEntity(BidRequest bidRequest);
 
-    @Mapping(target = "createdTimestamp", ignore = true)
-    @Mapping(target = "updatedTimestamp", ignore = true)
+    @Mapping(target = "audit", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comitte", ignore = true)
     @Mapping(target = "member", ignore = true)

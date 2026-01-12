@@ -78,16 +78,34 @@ public class AuthService {
             throw new RuntimeException("invalid credentials");
         }
         log.info("Creating token for user: {}", loginRequest.getUsernameOrEmail());
-        byte[] decodedSecret = Base64.getDecoder().decode(jwtSecret); // CHANGE: Decode the Base64 secret
-        String token = Jwts.builder().setSubject(user.getUsername()).setIssuedAt(new Date())
+        byte[] decodedSecret = Base64.getDecoder().decode(jwtSecret);
+        
+        // Prepare user details
+        LoginUserDetails loginUserDetails = prepareLoginUserDetails(user);
+        
+        // Store all user details in claims
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", loginUserDetails.getMemberId());
+        claims.put("email", loginUserDetails.getEmail());
+        claims.put("name", loginUserDetails.getName());
+        claims.put("mobile", loginUserDetails.getMobile());
+        claims.put("roleIds", new ArrayList<>(loginUserDetails.getGrantedRoleIds()));
+        claims.put("roleNames", new ArrayList<>(loginUserDetails.getGrantedRoleNames()));
+        claims.put("authorityNames", new ArrayList<>(loginUserDetails.getGrantedAuthorities()));
+        
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, decodedSecret).compact(); // CHANGE: Use decoded secret
+                .signWith(SignatureAlgorithm.HS512, decodedSecret)
+                .compact();
 
-        log.info("Login successful for user: {}", user.getUsername()); // CHANGE: Log successful login
+        log.info("Login successful for user: {}", user.getUsername());
 
         // Initialize session tracking
         tokenBlacklistService.updateActivity(token);
-        return new LoginResponse(token, "Bearer", jwtExpirationMs, prepareLoginUserDetails(user));
+        return new LoginResponse(token, "Bearer", jwtExpirationMs, loginUserDetails);
     }
 
     public LoginUserDetails prepareLoginUserDetails(Member member) {
@@ -158,6 +176,48 @@ public class AuthService {
     }
 
     /**
+     * Extract LoginUserDetails from JWT token claims (without DB call)
+     */
+    @SuppressWarnings("unchecked")
+    public LoginUserDetails extractUserDetailsFromToken(String token) {
+        byte[] decodedSecret = Base64.getDecoder().decode(jwtSecret);
+        var claims = Jwts.parser()
+                .setSigningKey(decodedSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        
+        // Extract all fields from claims
+        Long memberId = claims.get("memberId", Long.class);
+        String username = claims.getSubject();
+        String email = claims.get("email", String.class);
+        String name = claims.get("name", String.class);
+        String mobile = claims.get("mobile", String.class);
+        
+        // Extract collections from claims
+        List<Integer> roleIdsInt = (List<Integer>) claims.get("roleIds");
+        Set<Long> roleIds = roleIdsInt != null ? roleIdsInt.stream().map(Long::valueOf).collect(Collectors.toSet()) : new HashSet<>();
+        
+        List<String> roleNamesList = (List<String>) claims.get("roleNames");
+        Set<String> roleNames = roleNamesList != null ? new HashSet<>(roleNamesList) : new HashSet<>();
+        
+        List<String> authorityNamesList = (List<String>) claims.get("authorityNames");
+        Set<String> authorityNames = authorityNamesList != null ? new HashSet<>(authorityNamesList) : new HashSet<>();
+        
+        // Combine role names and authority names for granted authorities
+        Set<String> allAuthorities = new HashSet<>();
+        allAuthorities.addAll(roleNames);
+        allAuthorities.addAll(authorityNames);
+        
+        Set<GrantedAuthority> grantedAuthorities = allAuthorities.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+        
+        // Reconstruct LoginUserDetails without DB call
+        return new LoginUserDetails(memberId, username, email, name, mobile,
+                roleIds, roleNames, authorityNames, grantedAuthorities);
+    }
+
+    /**
      * Validate JWT token
      */
     public boolean validateToken(String token, String username) {
@@ -171,13 +231,23 @@ public class AuthService {
     }
 
     /**
-     * Extract roles from member
+     * Get currently logged-in user's details from SecurityContext (without DB call)
+     * Returns LoginUserDetails with all user information from the current authentication context
      */
-    public List<String> getRolesByUsername(String username) {
-        Member member = memberRepository.findByUsernameWithRoles(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return member.getRoles().stream()
-                .map(role -> "ROLE_" + role.getRoleName())
-                .toList();
+    public LoginUserDetails getCurrentUserDetails() {
+        org.springframework.security.core.Authentication authentication = 
+            org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated() 
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new RuntimeException("No authenticated user found");
+        }
+        
+        // Principal is now LoginUserDetails (set by JwtAuthenticationFilter)
+        if (authentication.getPrincipal() instanceof LoginUserDetails) {
+            return (LoginUserDetails) authentication.getPrincipal();
+        }
+        
+        throw new RuntimeException("Invalid principal type");
     }
 }

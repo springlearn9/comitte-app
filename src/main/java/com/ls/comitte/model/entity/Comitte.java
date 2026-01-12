@@ -1,16 +1,17 @@
 package com.ls.comitte.model.entity;
 
 import com.ls.auth.model.entity.Member;
+import com.ls.common.model.AuditMetadata;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comittes")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class Comitte {
@@ -42,17 +43,15 @@ public class Comitte {
     @Transient
     private Integer associatedMembersCount;
     
-    @CreatedDate
-    private LocalDateTime createdTimestamp;
-    @LastModifiedDate
-    private LocalDateTime updatedTimestamp;
+    @Embedded
+    private AuditMetadata audit;
 
     // All args constructor (needed for Lombok @Builder and JPQL)
     public Comitte(Long comitteId, Member owner, String comitteName, LocalDate startDate, 
                    Integer fullAmount, Integer totalShares, Integer fullShare, 
                    Integer dueDateDays, Integer paymentDateDays, Integer bidsCount,
                    Integer associatedSharesCount, Integer associatedMembersCount,
-                   LocalDateTime createdTimestamp, LocalDateTime updatedTimestamp) {
+                   AuditMetadata audit) {
         this.comitteId = comitteId;
         this.owner = owner;
         this.comitteName = comitteName;
@@ -65,8 +64,7 @@ public class Comitte {
         this.bidsCount = bidsCount;
         this.associatedSharesCount = associatedSharesCount;
         this.associatedMembersCount = associatedMembersCount;
-        this.createdTimestamp = createdTimestamp;
-        this.updatedTimestamp = updatedTimestamp;
+        this.audit = audit;
     }
     
 }

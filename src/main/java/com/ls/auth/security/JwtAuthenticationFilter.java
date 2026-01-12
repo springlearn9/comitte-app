@@ -79,16 +79,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // Validate token
                 if (authService.validateToken(token, username)) {
-                    // Get roles from database
-                    List<String> roles = authService.getRolesByUsername(username);
+                    // Extract user details from JWT token (without DB call)
+                    com.ls.auth.model.response.LoginUserDetails userDetails = authService.extractUserDetailsFromToken(token);
                     
-                    // Create authentication token with authorities
-                    List<SimpleGrantedAuthority> authorities = roles.stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-
+                    // Create authentication token with LoginUserDetails as principal
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(username, null, authorities);
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     // Set authentication in security context
