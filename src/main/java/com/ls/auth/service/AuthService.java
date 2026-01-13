@@ -56,7 +56,7 @@ public class AuthService {
         Member member = Member.builder().username(registerRequest.getUsername()).email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .mobile(registerRequest.getMobile()).build();
-        Role role = roleRepository.findByRoleName("MEMBER").orElse(null);
+        Role role = roleRepository.findByRoleName("COMITTE_MEMBER").orElse(null);
         Set<Role> roles = new HashSet<>();
         if (role != null) roles.add(role);
         member.setRoles(roles);
