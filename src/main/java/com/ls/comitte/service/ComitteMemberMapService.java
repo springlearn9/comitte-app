@@ -8,7 +8,7 @@ import com.ls.auth.model.entity.Member;
 import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.auth.repository.MemberRepository;
-import com.ls.comitte.util.ResponseMapper;
+import com.ls.comitte.util.ComitteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ComitteMemberMapService {
-    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private final ComitteMapper mapper = ComitteMapper.INSTANCE;
     private static final String COMITTE_MEMBER_MAPPING_NOT_FOUND = "Comitte and member mapping not found";
     private final ComitteMemberMapRepository repo;
     private final ComitteRepository comitteRepository;

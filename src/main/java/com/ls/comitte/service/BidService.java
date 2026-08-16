@@ -9,7 +9,7 @@ import com.ls.comitte.repository.BidRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.auth.repository.MemberRepository;
 import com.ls.comitte.util.ServiceUtil;
-import com.ls.comitte.util.ResponseMapper;
+import com.ls.comitte.util.ComitteMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BidService {
-    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private final ComitteMapper mapper = ComitteMapper.INSTANCE;
     private static final String BID_NOT_FOUND = "Bid not found";
     private static final String COMITTE_NOT_FOUND = "Committee not found";
     private static final String MEMBER_NOT_FOUND = "Member not found";

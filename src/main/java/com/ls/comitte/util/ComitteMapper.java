@@ -14,8 +14,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ResponseMapper {
-    ResponseMapper INSTANCE = Mappers.getMapper(ResponseMapper.class);
+public interface ComitteMapper {
+    ComitteMapper INSTANCE = Mappers.getMapper(ComitteMapper.class);
     
     @Mapping(source = "owner.memberId", target = "ownerId")
     @Mapping(source = "owner.name", target = "ownerName")

@@ -10,7 +10,7 @@ import com.ls.comitte.repository.ComitteMemberMapRepository;
 import com.ls.comitte.repository.ComitteRepository;
 import com.ls.auth.repository.MemberRepository;
 import com.ls.comitte.util.ServiceUtil;
-import com.ls.comitte.util.ResponseMapper;
+import com.ls.comitte.util.ComitteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ComitteService {
-    private final ResponseMapper mapper = ResponseMapper.INSTANCE;
+    private final ComitteMapper mapper = ComitteMapper.INSTANCE;
     private static final String COMITTE_NOT_FOUND = "Comitte not found";
 
     private final ComitteRepository comitteRepository;

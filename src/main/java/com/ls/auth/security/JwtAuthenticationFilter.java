@@ -39,7 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         // Skip filter for public endpoints
-        String path = request.getRequestURI();
+        // Use servlet path so matching is stable even when app has a context path/prefix.
+        String path = request.getServletPath();
         if (isPublicEndpoint(path)) {
             filterChain.doFilter(request, response);
             return;
@@ -118,9 +119,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/password/")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
+                || path.startsWith("/api-docs")
                 || path.startsWith("/swagger-resources")
                 || path.startsWith("/webjars/")
                 || path.equals("/swagger-ui.html")
+                || path.equals("/api-docs")
                 || path.equals("/error");
     }
 
